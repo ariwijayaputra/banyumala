@@ -1,10 +1,13 @@
-const express = require("express");
+import express from "express";
+import cors from "cors";
+import route from "./routes.js";
+
 const app = express();
-let port = process.env.PORT || 3000;
 
-app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 app.use(express.json());
+app.use(route);
 
-app.listen(port, function () {
-	console.log("App listening on port " + port + "!");
-});
+app.listen(process.env.PORT, () =>
+	console.log("Server running and listening on port " + process.env.PORT + "!")
+);

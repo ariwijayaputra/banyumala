@@ -1,8 +1,9 @@
 {
-  "name": "haifilo",
+  "name": "microservices",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "microservice for haifilo project",
+  "type": "module",
+  "main": "app.js",
   "scripts": {
     "devStart": "nodemon app.js"
   },
@@ -10,7 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.1"
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.21.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
