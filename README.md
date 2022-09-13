@@ -7,7 +7,7 @@ Microservice - API for HaiFilo project based on Node.js and Express
 Use the package manager [git](https://git-scm.com/download/win) to clone this repository.
 
 ```bash
-git clone https://gitlab.com/haifilo/microservice-api.git
+git clone [url]
 ```
 
 ## Usage
@@ -21,8 +21,7 @@ Once installed, initialize the env file by changing it to .env and change the po
 ## Contributing
 After making a feature, you can do as follows:
 ```bash
-git remote add origin https://gitlab.com/haifilo/microservice-api.git
-
+git remote add origin [url]
 git remote -v
 
 git checkout -b [name_branch]
@@ -42,5 +41,4 @@ git push origin [name_branch]
 ```
 
 
-## License
-[HaiFilo](https://haifilo.id/)
+
