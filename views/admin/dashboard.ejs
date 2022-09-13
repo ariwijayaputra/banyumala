@@ -1,0 +1,173 @@
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row my-3 mx-1">
+      <!--Category Card-->
+      <div class="col-md-6 col-lg-3 bg-gold">
+        <div class="card shadow-sm">
+          <div class="card-body ">
+            <h5 class=" font-weight-bold text-secondary ">Category</h5>
+            <h3 class="card-text">6</h3>
+            <a href="#">
+              <i class="fa-solid fa-arrow-right"></i>
+              <span class="ml-1">Details</span>
+            </a>
+            <!--Category icon-->
+            <div class=" position-absolute d-flex justify-content-center  bg-primary rounded-circle "
+              style="width: 56px; height:56px; top:20px; right:20px">
+              <i class="fa-solid fa-tags fa-lg my-auto "></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end Category Card-->
+      <!--Product Card-->
+      <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm">
+          <div class="card-body ">
+            <h5 class=" font-weight-bold text-secondary ">Products</h5>
+            <h3 class="card-text">6</h3>
+            <a href="#">
+              <i class="fa-solid fa-arrow-right"></i>
+              <span class="ml-1">Details</span>
+            </a>
+            <!--Product icon-->
+            <div class=" position-absolute d-flex justify-content-center  bg-primary rounded-circle "
+              style="width: 56px; height:56px; top:20px; right:20px">
+              <i class="fa-solid fa-basket-shopping fa-lg my-auto "></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end Product Card-->
+      <!--Tickets Card-->
+      <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm">
+          <div class="card-body ">
+            <h5 class=" font-weight-bold text-secondary ">Tickets Sold</h5>
+            <h3 class="card-text">6</h3>
+            <a href="#">
+              <i class="fa-solid fa-arrow-right"></i>
+              <span class="ml-1">Details</span>
+            </a>
+            <!--Tickets icon-->
+            <div class=" position-absolute d-flex justify-content-center  bg-primary rounded-circle "
+              style="width: 56px; height:56px; top:20px; right:20px">
+              <i class="fa-solid fa-ticket fa-lg my-auto "></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end Tickets Card-->
+      <!--Camping Card-->
+      <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm">
+          <div class="card-body ">
+            <h5 class=" font-weight-bold text-secondary ">Tent Sold</h5>
+            <h3 class="card-text">6</h3>
+            <a href="#">
+              <i class="fa-solid fa-arrow-right"></i>
+              <span class="ml-1">Details</span>
+            </a>
+            <!--Camping icon-->
+            <div class=" position-absolute d-flex justify-content-center  bg-primary rounded-circle "
+              style="width: 56px; height:56px; top:20px; right:20px">
+              <i class="fa-solid fa-campground fa-lg my-auto "></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end Camping Card-->
+    </div>
+
+    <div class="card card-dark m-3">
+      <div class="card-header d-flex justify-content-center">
+        <h5 class=" my-auto mr-auto">Sales Chart</h4>
+        <div class="btn-group">
+          <div class="dropdown">
+            <button type="button" class="btn btn-dark dropdown-toggle px-2" data-toggle="dropdown" aria-expanded="false">
+              Aug
+            </button>
+            <div class="dropdown-menu bg-white rounded-lg">
+              <a class="dropdown-item" href="#">January</a>
+              <a class="dropdown-item" href="#">February</a>
+              <a class="dropdown-item" href="#">March</a>
+              <a class="dropdown-item" href="#">April</a>
+              <a class="dropdown-item" href="#">May</a>
+              <a class="dropdown-item" href="#">June</a>
+              <a class="dropdown-item" href="#">July</a>
+              <a class="dropdown-item" href="#">Augustus</a>
+              <a class="dropdown-item" href="#">September</a>
+              <a class="dropdown-item" href="#">October</a>
+              <a class="dropdown-item" href="#">November</a>
+              <a class="dropdown-item" href="#">December</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <button type="button" class="btn btn-dark dropdown-toggle px-2" data-toggle="dropdown" aria-expanded="false">
+              2022
+            </button>
+            <div class="dropdown-menu bg-white rounded-lg">
+              <a class="dropdown-item" href="#">2022</a>
+              <a class="dropdown-item" href="#">2021</a>
+
+            </div>
+          </div>
+          
+        </div>
+        <div class="card-tools my-auto">
+          <!-- This will cause the card to collapse when clicked -->
+          <button type="button" class="btn btn-tool"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+        </div>
+        <!-- /.card-tools -->
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <canvas id="myChart" style="max-height: 400px;"></canvas>
+      </div>
+      <!-- /.card-body -->
+
+    </div>
+    <!-- /.card -->
+  </div>
+</section>
+
+<!--Chart Custom-->
+<script>
+  const ctx = document.getElementById('myChart').getContext('2d');
+  const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>

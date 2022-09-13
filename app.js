@@ -4,25 +4,35 @@ if (process.env.NODE_ENV !== 'production') {
 
 const createError = require('http-errors');
 const express = require('express');
+
 const cookieParser = require('cookie-parser');
 const cors = require("cors");
-
-const app = express();
+const bodyParser = require('body-parser')
+const expressLayouts = require('express-ejs-layouts')
 const path = require('path');
 
+const indexRouter = require('./routes/landing.js');
+const adminRouter = require('./routes/admin.js');
 
-var indexRouter = require('./routes/index.js');
+const app = express();
 
 // set view folder to ./views
 app.set('views', path.join(__dirname, 'views'));
 // set view engine to ejs
 app.set('view engine', 'ejs');
 
+app.use(express.urlencoded({extended:false}));
+app.use(expressLayouts);
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('./node_modules/admin-lte')) 
 
 app.use('/', indexRouter);
+app.use('/admin',adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -37,7 +47,7 @@ app.use(function (err, req, res, next) {
 
 	// render the error page
 	res.status(err.status || 500);
-	res.render('error');
+	res.render('error',{layout: false});
 });
 
 // run server

@@ -1,0 +1,143 @@
+<section class="content">
+  <div class="container-fluid">
+
+      <div class="card card-dark m-3 ">
+          <div class="card-header d-flex justify-content-center ">
+              <h5 class=" my-auto mr-auto">Data Categories</h5>
+              <div class="card-tools my-auto">
+                  <!-- This will cause the card to collapse when clicked -->
+
+                  <button type="button" class="btn btn-tool"><i class="fa-solid fa-print"></i></button>
+                  <button type="button" class="btn btn-tool"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                          class="fas fa-minus"></i></button>
+              </div>
+              <!-- /.card-tools -->
+          </div>
+          <div class="card-body">
+              <div class="d-flex mb-3 justify-content-between">
+
+
+                  <!--Add Button-->
+                  <a name="add" id="" class="btn btn-info mr-2 mr-sm-auto" href="#" data-toggle="modal"
+                      data-target="#exampleModal" role="button">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                      <span class="d-none d-sm-inline ml-1">
+                          Add Category
+                      </span>
+                  </a>
+                  <!--Modal to Input Category-->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                      aria-hidden="true">
+                      <div class="modal-dialog">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                  </button>
+                              </div>
+                              <div class="modal-body">
+                                  <div class="form-group">
+                                      <label for="">Category Name</label>
+                                      <input type="text" class="form-control mb-3" name="" id="" placeholder="">
+                                  </div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-outline-primary "
+                                      data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-primary">Add Category</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <!--End Modal-->
+                  <!--Search-->
+                  <form class="form-inline">
+                      <div class="input-group">
+                          <input type="search" class="form-control" placeholder="Search"
+                              aria-label="Recipient's username" aria-describedby="button-addon2">
+                          <div class="input-group-append">
+                              <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                                  <i class="fa-solid fa-magnifying-glass"></i>
+                              </button>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+
+              <div class="collapse" id="contentId">
+
+              </div>
+              <div class="table-responsive ">
+                  <table class="table table-striped text-center ">
+                      <thead>
+                          <tr>
+                              <th scope="col">No</th>
+                              <th scope="col" style="min-width: 144px;" class="col">Category Name</th>
+                              <th scope="col" style="min-width: 144px;">Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td scope="row" class="align-middle">1</td>
+                              <td class="align-middle">John Doe</td>
+                              <td>
+                                  <button type="button" name="" id="" class="btn btn-dark btn-sm px-3 mx-1">
+                                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                                  </button>
+                                  <button type="button" name="" id="" class="btn btn-danger btn-sm px-3 mx-1">
+                                      <i class="fa fa-trash" aria-hidden="true"></i>
+                                  </button>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td scope="row" class="align-middle">2</td>
+                              <td class="align-middle">Bruce Wayne</td>
+                              <td>
+                                  <button type="button" name="" id="" class="btn btn-dark btn-sm px-3 mx-1">
+                                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                                  </button>
+                                  <button type="button" name="" id="" class="btn btn-danger btn-sm px-3 mx-1">
+                                      <i class="fa fa-trash" aria-hidden="true"></i>
+                                  </button>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+
+          <div class="card-footer d-flex justify-content-between bg-dark rounded-bottom">
+              <!--Show Button-->
+              <div>
+                  <span class="my-auto align-middle d-none d-sm-inline ">Show</span>
+                  <div class="btn-group mx-0 mx-sm-2">
+                      <button class="btn btn-dark border border-secondary dropdown-toggle px-1 py-0" type="button"
+                          id="triggerId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">10
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-left bg-dark" aria-labelledby="triggerId">
+                          <a class="dropdown-item" href="#">10</a>
+                          <a class="dropdown-item" href="#">20</a>
+                          <a class="dropdown-item" href="#">50</a>
+                          <a class="dropdown-item" href="#">100</a>
+                      </div>
+                  </div>
+              </div>
+              <div class="ml-auto">
+                  <span class="my-auto align-middle d-none d-sm-inline ">Page</span>
+                  <div class="btn-group btn-group-sm" role="group" aria-label="First group">
+                      <a class="btn btn-dark "><i class="fa-solid fa-angle-left"></i></a>
+                      <a class="btn btn-dark text-white">1</a>
+                      <a class="btn btn-dark">2</a>
+                      <a class="btn btn-dark disabled">...</a>
+                      <a class="btn btn-dark">7</a>
+                      <a class="btn btn-dark "><i class="fa-solid fa-angle-right"></i></a>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- /.card -->
+  </div>
+</section>

@@ -1,15 +1,4 @@
-import {
-	getUsers,
-	getUserById,
-	createUser,
-	updateUser,
-	deleteUser,
-} from "../Controller/UserController.js";
 
-export default {
-	getUsers,
-	getUserById,
-	createUser,
-	updateUser,
-	deleteUser,
-};
+
+const user = require("../Controller/UserController.js")
+
