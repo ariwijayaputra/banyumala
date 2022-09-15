@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const categories = require('../Controller/categoryController.js')
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -17,8 +18,15 @@ router.get('/transactions', function (req, res, next) {
 });
 
 /* GET categories page. */
-router.get('/categories', function (req, res, next) {
-    res.render('admin/categories', { title: 'Categories', layout: './admin/layout.ejs' });
+router.get('/categories', categories.getCategories, function (req, res, next) {
+    let Categories = res.app.locals.Categories
+    res.render('admin/categories', { title: 'Categories', layout: './admin/layout.ejs', Categories });
+});
+
+// Create categories
+router.post('/categories', categories.upsertCategories, function (req, res, next) {
+    console.log(res.app.locals.Categories);
+    res.redirect(301, '/admin/categories');
 });
 
 /* GET products page. */
