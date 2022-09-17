@@ -4,9 +4,9 @@ const errHandler =  require("../Helpers/error_helper.js")
 // Create/update Categories
 const upsertCategories = async (req, res, next) => {
 	try {
-		let results = await Categories.upsert(req.body, { where: { id: req.params.id } });
-        results=JSON.parse(JSON.stringify(results[0]));
-		res.app.locals.Categories = results;
+		let result = await Categories.upsert(req.body, { where: { id: req.params.id } });
+        result=JSON.parse(JSON.stringify(result[0]));
+		res.app.locals.Categories = result;
 	} catch (error) {
 		res.status(500).json(errHandler(error));
 	}
@@ -29,14 +29,14 @@ const getCategoriesById = async (req, res) => {
 // GET data Categories by id
 const getCategories = async (req, res, next) => {
 	try {
-		let results = await Categories.findAll();
-		if(results == ""){
+		let result = await Categories.findAll({order:[["id_category",'DESC']]});
+		if(result == ""){
             res.app.locals.Categories = {
-                msg: "no category exist"
+                error: "no category exist"
             };
         }else{
-            results=JSON.parse(JSON.stringify(results));
-            res.app.locals.Categories = results;
+            result=JSON.parse(JSON.stringify(result));
+            res.app.locals.Categories = result;
         }
         
 	} catch (error) {
@@ -46,21 +46,22 @@ const getCategories = async (req, res, next) => {
 };
 
 //DELETE Categories
-const deleteCategoriesById = async (req, res) => {
+const deleteCategoriesById = async (req, res,next) => {
 	try {
 		// check if the requested record exist, if exist delete
-		const isExist = await Categories.findOne({ where: { id: req.body.id } });
+		const isExist = await Categories.findOne({ where: { id_category: req.params.id } });
 		if(isExist){
-			const result = await Categories.destroy({ where: { id: req.body.id } });
+			const result = await Categories.destroy({ where: { id_category: req.params.id } });
 			if(result){
-				res.status(200).json({ msg: "Delete berhasil" });
+				res.app.locals.Categories = {msg: "data berhasil dihapus"};
 			}
 		}else{
-			res.status(404).json({error: "Data tidak ada pada tabel"});
+			res.app.locals.Categories = {error: "Data tidak ada pada tabel"};
 		}
 	} catch (error) {
-		res.status(500).json(errHandler(error));
+		res.app.locals.Categories=JSON.parse(JSON.stringify(errHandler(error)));
 	}
+	next();
 };
 
 module.exports = {

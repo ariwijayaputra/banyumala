@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const createError = require('http-errors');
+const methodOverride = require('method-override')
 const express = require('express');
 
 const cookieParser = require('cookie-parser');
@@ -15,6 +16,8 @@ const indexRouter = require('./routes/landing.js');
 const adminRouter = require('./routes/admin.js');
 
 const app = express();
+app.use(methodOverride('_method'))
+
 
 // set view folder to ./views
 app.set('views', path.join(__dirname, 'views'));

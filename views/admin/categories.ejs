@@ -19,51 +19,22 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <!--Add Button-->
                     <a name="add" id="" class="btn btn-info mr-2 mr-sm-auto" href="#" data-toggle="modal"
-                        data-target="#exampleModal" role="button">
+                        data-target="#addCategory" role="button">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline ml-1">
                             Add Category
                         </span>
-                    </a>
-                    <!--Modal to Input Category-->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <form action="/admin/categories" method="POST">
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="">Category Name</label>
-                                            <input type="text" class="form-control mb-3" name="name" id=""
-                                                placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-primary "
-                                            data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Add Category</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!--End Modal-->
+                    </a>                    
                     <!--Search-->
                     <form class="form-inline">
-                        <div class="input-group">
-                            <input type="search" class="form-control" placeholder="Search"
-                                aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                        <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">
                                     <i class="fa-solid fa-magnifying-glass"></i>
-                                </button>
+                                </span>
                             </div>
+                            <input type="text" class="form-control" placeholder="Search"
+                                aria-label="Recipient's username" aria-describedby="button-addon2" id="mysearch">
                         </div>
                     </form>
                 </div>
@@ -71,90 +42,158 @@
                 <div class="collapse" id="contentId">
 
                 </div>
-                <div class="table-responsive ">
-                    <table class="table table-striped text-center ">
-                        <thead>
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col" style="min-width: 144px;" class="col">Category Name</th>
-                                <th scope="col" style="min-width: 144px;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% //Tampilkan semua data dari tabel  %>
-                            <% let number = 1 %> 
-                            <% Categories.forEach(category => { %>
+                <% if (!Categories.error) { %>
+                    <div class="table-responsive ">
+                        <table class="table table-striped text-center " id="dt_category">
+                            <thead>
                                 <tr>
-                                    <td scope="row" class="align-middle"><%= number %></td>
-                                    <td class="align-middle"><%= category.name %></td>
-                                    <td>
-                                        <button type="button" name="" id="" class="btn btn-dark btn-sm px-3 mx-1">
-                                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                                        </button>
-                                        <button type="button" name="" id="" class="btn btn-danger btn-sm px-3 mx-1">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </button>
-                                    </td>
+                                    <th scope="col">No</th>
+                                    <th scope="col" style="min-width: 144px;" class="col">Category Name</th>
+                                    <th scope="col" style="min-width: 144px;">Action</th>
                                 </tr>
-                            <% number++ }) %>
-                            <tr>
-                                <td scope="row" class="align-middle">1</td>
-                                <td class="align-middle">John Doe</td>
-                                <td>
-                                    <button type="button" name="" id="" class="btn btn-dark btn-sm px-3 mx-1">
-                                        <i class="fa fa-pencil" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" name="" id="" class="btn btn-danger btn-sm px-3 mx-1">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td scope="row" class="align-middle">2</td>
-                                <td class="align-middle">Bruce Wayne</td>
-                                <td>
-                                    <button type="button" name="" id="" class="btn btn-dark btn-sm px-3 mx-1">
-                                        <i class="fa fa-pencil" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" name="" id="" class="btn btn-danger btn-sm px-3 mx-1">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                <% //Tampilkan semua data dari tabel  %>
+                                <% let number = 1 %> 
+                                <% Categories.forEach(category => { %>
+                                    <tr>
+                                        <td scope="row" class="align-middle"><%= number %></td>
+                                        <td class="align-middle"><%= category.name %></td>
+                                        <td>
+                                            
+                                            <button type="submit" name="" id="" class="btn btn-dark btn-sm px-3 mx-1" data-toggle="modal"
+                                            data-target="#edit<%= category.id_category %>"  role="button">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </button>
+                                            <form action="/admin/categories/<%= category.id_category %>?_method=DELETE" method="POST" class="d-inline">
+                                                <button type="submit" name="" id="" class="btn btn-danger btn-sm px-3 mx-1">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                            
+                                        </td>
+                                    </tr>
+                                <% number++ }) %>  
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="d-flex flex-column p-3 align-items-center justify-content-center">
+                        <img src="/images/nodata.svg"  alt="no data found" class="w-25 mx-auto">
+                        <h3 class="text-bold text-gray mt-4">No category found</h3>
+                    </div>
+                <% } %>
+                
             </div>
 
-            <div class="card-footer d-flex justify-content-between bg-dark rounded-bottom">
-                <!--Show Button-->
-                <div>
-                    <span class="my-auto align-middle d-none d-sm-inline ">Show</span>
-                    <div class="btn-group mx-0 mx-sm-2">
-                        <button class="btn btn-dark border border-secondary dropdown-toggle px-1 py-0" type="button"
-                            id="triggerId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">10
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-left bg-dark" aria-labelledby="triggerId">
-                            <a class="dropdown-item" href="#">10</a>
-                            <a class="dropdown-item" href="#">20</a>
-                            <a class="dropdown-item" href="#">50</a>
-                            <a class="dropdown-item" href="#">100</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="ml-auto">
-                    <span class="my-auto align-middle d-none d-sm-inline ">Page</span>
-                    <div class="btn-group btn-group-sm" role="group" aria-label="First group">
-                        <a class="btn btn-dark "><i class="fa-solid fa-angle-left"></i></a>
-                        <a class="btn btn-dark text-white">1</a>
-                        <a class="btn btn-dark">2</a>
-                        <a class="btn btn-dark disabled">...</a>
-                        <a class="btn btn-dark">7</a>
-                        <a class="btn btn-dark "><i class="fa-solid fa-angle-right"></i></a>
-                    </div>
-                </div>
-            </div>
+            
         </div>
         <!-- /.card -->
     </div>
+    <!--Modal to Input Category-->
+    <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/admin/categories" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="">Category Name</label>
+                            <input type="text" class="form-control mb-3" name="name" id=""
+                                placeholder="">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary "
+                            data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--End Modal-->
+    <!--Modal to Edit Category-->
+    <% if (!Categories.error) { %>
+    <% Categories.forEach(category => { %>
+        <div class="modal fade" id="edit<%= category.id_category %>"   tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="/admin/categories" method="POST">
+                        <input type="hidden" name="id_category" value="<%= category.id_category %> ">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="">Category Name</label>
+                                <input type="text" class="form-control mb-3" name="name" id=""
+                                    placeholder="" value="<%= category.name %>">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-dark "
+                                data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-dark">Add Category</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> 
+    <% })} %>  
+    <!--End Modal-->
+    
 </section>
+<script>
+    //membuat tabel category
+    $(document).ready(function () {
+        const table = $('#dt_category').DataTable({
+            dom: 'rti<"card-footer d-flex justify-content-start bg-dark rounded-bottom p-0"lp>',
+            "paging": true,
+            "serverSide": false,
+            "pageLength": 10,
+            "language": {
+                "lengthMenu": "Show _MENU_"
+              }
+
+        });
+        // search tabel
+        $('#mysearch').on( 'keyup', function () {
+            table.search( this.value ).draw();
+        } );
+        // jika nilai tabel berubah, style page button
+        table.on( 'draw', function () {
+            //styling page button
+            $('.dataTables_paginate').addClass("my-auto")
+            $('.dataTables_paginate .pagination').addClass("my-auto btn-group")
+            $('.dataTables_paginate .pagination li').addClass("btn btn-dark")
+            $('.dataTables_paginate .pagination li a').addClass("text-white")
+        } );
+        //positioning footer
+        let $cardFooter = $('.dataTables_wrapper > .card-footer');
+        $cardFooter.parent().after($cardFooter);
+        $cardFooter = $('.table-responsive  > .card-footer');
+        $cardFooter.parent().after($cardFooter);
+        $cardFooter = $('.card-body  > .card-footer');
+        $cardFooter.parent().after($cardFooter);
+        //styling show entries
+        $('.dataTables_length label').addClass("d-flex align-middle my-auto ml-3")
+        $('.dataTables_length label select').addClass("py-0 h-0 bg-dark border-dark mx-1").removeClass("form-control")
+        $('.dataTables_length').addClass("mr-auto my-auto")
+        //styling page button
+        $('.dataTables_paginate').addClass("my-auto")
+        $('.dataTables_paginate .pagination').addClass("my-auto btn-group")
+        $('.dataTables_paginate .pagination li').addClass("btn btn-dark")
+        $('.dataTables_paginate .pagination li a').addClass("text-white")
+    });
+</script>

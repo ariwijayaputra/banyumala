@@ -29,6 +29,12 @@ router.post('/categories', categories.upsertCategories, function (req, res, next
     res.redirect(301, '/admin/categories');
 });
 
+// Create categories
+router.delete('/categories/:id', categories.deleteCategoriesById, function (req, res, next) {
+    console.log(res.app.locals.Categories);
+    res.redirect(301, '/admin/categories');
+});
+
 /* GET products page. */
 router.get('/products', function (req, res, next) {
     res.render('admin/products', { title: 'Products', layout: './admin/layout.ejs' });

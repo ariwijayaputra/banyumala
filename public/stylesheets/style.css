@@ -4,3 +4,12 @@
 .bg-gold{
   background-color: gold!important;
 }
+.text-teal{
+  color: #00BFA6!important;
+}
+.bg-teal{
+  background-color: #00BFA6!important;
+}
+.bg-teal:hover {
+  background-color: rgb(73, 136, 75); /* Green */
+}
