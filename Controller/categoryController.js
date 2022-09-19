@@ -7,6 +7,7 @@ const upsertCategories = async (req, res, next) => {
 		let result = await Categories.upsert(req.body, { where: { id: req.params.id } });
         result=JSON.parse(JSON.stringify(result[0]));
 		res.app.locals.Categories = result;
+		res.app.locals.msg = "Success! Data has been saved";
 	} catch (error) {
 		res.status(500).json(errHandler(error));
 	}
@@ -37,6 +38,7 @@ const getCategories = async (req, res, next) => {
         }else{
             result=JSON.parse(JSON.stringify(result));
             res.app.locals.Categories = result;
+			
         }
         
 	} catch (error) {
@@ -54,6 +56,7 @@ const deleteCategoriesById = async (req, res,next) => {
 			const result = await Categories.destroy({ where: { id_category: req.params.id } });
 			if(result){
 				res.app.locals.Categories = {msg: "data berhasil dihapus"};
+				res.app.locals.msg = "Success! Data has been deleted";
 			}
 		}else{
 			res.app.locals.Categories = {error: "Data tidak ada pada tabel"};

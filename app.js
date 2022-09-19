@@ -11,6 +11,7 @@ const cors = require("cors");
 const bodyParser = require('body-parser')
 const expressLayouts = require('express-ejs-layouts')
 const path = require('path');
+//const jszip = require('jszip/dist/jszip');
 
 const indexRouter = require('./routes/landing.js');
 const adminRouter = require('./routes/admin.js');
@@ -27,6 +28,7 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended:false}));
 app.use(expressLayouts);
 app.use(cors());
+//app.use(jszip);
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json()) // for parsing application/json

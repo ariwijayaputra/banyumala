@@ -20,12 +20,19 @@ router.get('/transactions', function (req, res, next) {
 /* GET categories page. */
 router.get('/categories', categories.getCategories, function (req, res, next) {
     let Categories = res.app.locals.Categories
-    res.render('admin/categories', { title: 'Categories', layout: './admin/layout.ejs', Categories });
+    let msg = res.app.locals.msg
+    console.log(msg)
+    res.render('admin/categories', { title: 'Categories', layout: './admin/layout.ejs', Categories, msg }, (err,html)=>{
+        res.app.locals.msg = null;
+        res.send(html);
+    });
 });
 
 // Create categories
 router.post('/categories', categories.upsertCategories, function (req, res, next) {
     console.log(res.app.locals.Categories);
+    res.locals.msg = res.app.locals.msg;
+    console.log(res.locals.msg)
     res.redirect(301, '/admin/categories');
 });
 
