@@ -14,20 +14,8 @@ const upsertCategories = async (req, res, next) => {
     next();
 };
 
-// GET data Categories by id
-const getCategoriesById = async (req, res) => {
-	try {
-		let result = await Categories.findOne({ where: { id: req.params.id } });
-		if(!result){
-            res.status(404).json({error: "data Categories tidak ditemukan"});
-        }else
-        res.status(200).json(result);
-	} catch (error) {
-		res.status(500).json(error.message);
-	}
-};
 
-// GET data Categories by id
+// GET all data Categories
 const getCategories = async (req, res, next) => {
 	try {
 		let result = await Categories.findAll({order:[["id_category",'DESC']]});
@@ -69,7 +57,6 @@ const deleteCategoriesById = async (req, res,next) => {
 
 module.exports = {
     upsertCategories,
-    getCategoriesById,
     deleteCategoriesById,
     getCategories
 }

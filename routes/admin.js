@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const categories = require('../Controller/categoryController.js')
+const categories = require('../Controller/categoryController.js');
+const users = require('../Controller/userController.js')
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -8,8 +9,25 @@ router.get('/', function (req, res, next) {
 });
 
 /* GET members page. */
-router.get('/members', function (req, res, next) {
-    res.render('admin/members', { title: 'Members', layout: './admin/layout.ejs' });
+router.get('/members', users.getMembers, function (req, res, next) {
+    let Members = res.app.locals.Members
+    let msg = res.app.locals.msg
+    console.log(Members)
+    res.render('admin/members', { title: 'Members', layout: './admin/layout.ejs', Members, msg },(err,html)=>{
+        res.app.locals.msg = null;
+        res.send(html);
+    });
+});
+
+// Create members
+router.post('/members', users.upsertMembers, function (req, res, next) {
+    res.locals.msg = res.app.locals.msg;
+    res.redirect(301, '/admin/members');
+});
+
+// Delete member
+router.delete('/members/:id', users.deleteUsersById, function (req, res, next) {
+    res.redirect(301, '/admin/members');
 });
 
 /* GET transaction page. */
@@ -21,7 +39,6 @@ router.get('/transactions', function (req, res, next) {
 router.get('/categories', categories.getCategories, function (req, res, next) {
     let Categories = res.app.locals.Categories
     let msg = res.app.locals.msg
-    console.log(msg)
     res.render('admin/categories', { title: 'Categories', layout: './admin/layout.ejs', Categories, msg }, (err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
@@ -36,7 +53,7 @@ router.post('/categories', categories.upsertCategories, function (req, res, next
     res.redirect(301, '/admin/categories');
 });
 
-// Create categories
+// Delete categories
 router.delete('/categories/:id', categories.deleteCategoriesById, function (req, res, next) {
     console.log(res.app.locals.Categories);
     res.redirect(301, '/admin/categories');

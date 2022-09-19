@@ -12,28 +12,21 @@
           
         <div class="card card-dark m-3 ">
             <div class="card-header d-flex justify-content-center ">
-                <h5 class=" my-auto mr-auto">Data Categories</h5>
+                <h5 class=" my-auto mr-auto">Data Members</h5>
                 <div class="card-tools my-auto">
                     <!-- This will cause the card to collapse when clicked -->
-                    <a type="button" class="btn btn-tool" href="/admin/categories" id="reload"><i class="fa-solid fa-arrow-rotate-right"></i></a>
+                    <a type="button" class="btn btn-tool" href="/admin/members" id="reload"><i class="fa-solid fa-arrow-rotate-right"></i></a>
                     <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
                             class="fas fa-minus"></i></button>
                 </div>
                 <!-- /.card-tools -->
             </div>
             <div class="card-body">
-                <div class="d-flex mb-3 justify-content-between">
-                    <!--Add Button-->
-                    <a name="add" id="" class="btn btn-info mr-2 mr-sm-auto" href="#" data-toggle="modal"
-                        data-target="#addCategory" role="button">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                        <span class="d-none d-sm-inline ml-1">
-                            Add Category
-                        </span>
-                    </a>                    
+                <div class="d-flex mb-3 justify-content-center justify-content-md-start">
+                                      
                     <!--Search-->
                     <form class="form-inline">
-                        <div class="input-group" >
+                        <div class="input-group ml-auto" >
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">
                                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -48,32 +41,42 @@
                 <div class="collapse" id="contentId">
 
                 </div>
-                <% if (!Categories.error) { %>
+                <% if (!Members.error) { %>
                     <div class="table-responsive ">
-                        <table class="table table-striped text-center " id="dt_category">
+                        <table class="table table-striped text-center " id="dt_member">
                             <thead>
                                 <tr>
                                     <th scope="col">No</th>
-                                    <th scope="col" style="min-width: 144px;" class="col">Category Name</th>
-                                    <th scope="col" style="min-width: 144px;">Action</th>
+                                    <th scope="col" style="min-width: 144px;" class="col">Member Name</th>
+                                    <th scope="col" style="min-width: 144px;" class="col">Username</th>
+                                    <th scope="col" style="min-width: 90px;" class="col">Gender</th>
+                                    <th scope="col" style="min-width: 144px;" class="col">Address</th>
+                                    <th scope="col" style="min-width: 144px;" class="col">Phone</th>
+                                    <th scope="col" style="min-width: 50px;" class="col">Photo</th>
+                                    <th scope="col" style="min-width: 50px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% //Tampilkan semua data dari tabel  %>
                                 <% let number = 1 %> 
-                                <% Categories.forEach(category => { %>
+                                <% Members.forEach(member => { %>
                                     <tr>
                                         <td scope="row" class="align-middle"><%= number %></td>
-                                        <td class="align-middle"><%= category.name %></td>
-                                        <td>
-                                            
-                                            <button type="submit" name="" id="" class="btn btn-dark btn-sm px-3 mx-1" data-toggle="modal"
-                                            data-target="#edit<%= category.id_category %>"  role="button">
-                                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                                            </button>
+                                        <td class="align-middle"><%= member.name %></td>
+                                        <td class="align-middle"><%= member.username %></td>
+                                        <td class="align-middle"><%= member.gender %></td>
+                                        <td class="align-middle"><%= member.address %></td>
+                                        <td class="align-middle"><%= member.phone %></td>
+                                        <td class="align-middle">
+                                            <button type="submit" name="" id="" class="btn btn-info btn-sm px-3 mx-1" data-toggle="modal"
+                                            data-target="#photo<%= member.id_user %>">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button>                                            
+                                        </td>
+                                        <td class="align-middle">                                            
                                             <button type="submit" name="" id="" class="btn btn-danger btn-sm px-3 mx-1" data-toggle="modal"
-                                            data-target="#delete<%= category.id_category %>">
-                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                            data-target="#delete<%= member.id_user %>">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
                                             </button>                                            
                                         </td>
                                     </tr>
@@ -84,7 +87,7 @@
                 <% } else { %>
                     <div class="d-flex flex-column p-3 align-items-center justify-content-center">
                         <img src="/images/nodata.svg"  alt="no data found" class="w-25 mx-auto">
-                        <h3 class="text-bold text-gray mt-4">No category found</h3>
+                        <h3 class="text-bold text-gray mt-4">No member found</h3>
                     </div>
                 <% } %>
                 
@@ -95,98 +98,36 @@
         <!-- /.card -->
     </div>
     
-    <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add New Member</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    
+    <% if (!Members.error) { %>
+    <% Members.forEach(member => { %>
+        <!-- Modal Photo -->
+        <div class="modal fade" id="photo<%= member.id_user %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"><%= member.name %>'s Photo </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="">Name</label>
-                        <input type="text" class="form-control mb-3" name="" id="" placeholder="">
-                        <div class="flex row">
-                            <div class="col-6">
-                                <label for="">Place Of Birth</label>
-                                <input type="text" class="form-control mb-3" name="" id=""
-                                    placeholder="">
-                            </div>
-                            <div class="col-6">
-                                <label for="">Date of Birth</label>
-                                <input type="date" class="form-control mb-3" name="" id=""
-                                    placeholder="">
-                            </div>
-                        </div>
-                        <label for="">Gender</label>
-                        <div class="flex row mb-3 px-2">
-                            <div class="form-check form-check-inline col-2">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                    id="inlineRadio1" value="option1">
-                                <label class="form-check-label" for="inlineRadio1">Male</label>
-                            </div>
-                            <div class="form-check form-check-inline ml-3 col-2">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                    id="inlineRadio2" value="option2">
-                                <label class="form-check-label" for="inlineRadio2">Female</label>
-                            </div>
-                        </div>
-                        <label for="">Address</label>
-                        <input type="text" class="form-control mb-3" name="" id="" placeholder="">
-                        <div class="form-group">
-                            <label for="exampleFormControlFile1">Input Image</label>
-                            <input type="file" accept="image/*" class="form-control-file"
-                                id="exampleFormControlFile1">
-                        </div>
+                        </button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary b"
-                        data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Add Member</button>
+                    <div class="modal-body d-flex justify-content-center flex-sm-row flex-column">
+                        
+                        <% if (member.photo) { %>
+                            <img class="rounded-lg img-responsive overflow-hidden" src="<%= member.photo %>"  width="450px" alt="">
+                        <% } else { %>
+                            <img class="rounded-lg img-responsive overflow-hidden w-75 m-sm-3 mx-auto my-3" src="/images/sad.svg" alt="">
+                            <h3 class="my-auto mx-3 text-secondary text-center text-sm-left">Sorry, There is no photo of this member on our data</h3>
+                        <% } %>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!--End Modal-->
-    
-    <% if (!Categories.error) { %>
-    <% Categories.forEach(category => { %>
-        <!--Modal to Edit Category-->
-        <div class="modal fade" id="edit<%= category.id_category %>"   tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="/admin/categories" method="POST">
-                        <input type="hidden" name="id_category" value="<%= category.id_category %> ">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="">Category Name</label>
-                                <input type="text" class="form-control mb-3" name="name" id=""
-                                    placeholder="" value="<%= category.name %>">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-dark "
-                                data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-dark">Add Category</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div> 
-        <!--End Modal-->
         <!-- Modal Delete -->
-        <div class="modal fade" id="delete<%= category.id_category %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="delete<%= member.id_user %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -196,12 +137,12 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this category?
+                    Are you sure you want to delete <strong> <%= member.name %> </strong> as a  member?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
-                    <form action="/admin/categories/<%= category.id_category %>?_method=DELETE" method="POST" class="d-inline">
-                        <button type="submit" class="btn btn-dark">Delete Category</button>
+                    <form action="/admin/members/<%= member.id_user %>?_method=DELETE" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-dark">Delete Member</button>
                     </form>
                 </div>
                 </div>
@@ -213,15 +154,33 @@
     
 </section>
 <script>
-    //membuat tabel category
+    //membuat tabel member
     $(document).ready(function () {
-        
         setTimeout(OpenMsg, 500);
         function OpenMsg(){
             $('#msgInfo').fadeIn(1500,function() { $(this).addClass("show"); });   
         }
+
+        // CHECK IF IMAGE EXISTS
+        function checkIfImageExists(url, callback) {
+            const img = new Image();
+            img.src = url;
+            
+            if (img.complete) {
+            callback(true);
+            } else {
+            img.onload = () => {
+                callback(true);
+            };
+            
+            img.onerror = () => {
+                callback(false);
+            };
+            }
+        }
+
         $.fn.DataTable.ext.pager.numbers_length = 3;
-        const table = $('#dt_category').DataTable({
+        const table = $('#dt_member').DataTable({
             dom: 'Brti<"card-footer d-flex justify-content-start bg-dark rounded-bottom p-0"lp>',
             "paging": true,
             "serverSide": false,
