@@ -12,10 +12,10 @@
         
       <div class="card card-dark m-3 ">
           <div class="card-header d-flex justify-content-center ">
-              <h5 class=" my-auto mr-auto">Data Categories</h5>
+              <h5 class=" my-auto mr-auto">Data Products</h5>
               <div class="card-tools my-auto">
                   <!-- This will cause the card to collapse when clicked -->
-                  <a type="button" class="btn btn-tool" href="/admin/categories" id="reload"><i class="fa-solid fa-arrow-rotate-right"></i></a>
+                  <a type="button" class="btn btn-tool" href="/admin/products" id="reload"><i class="fa-solid fa-arrow-rotate-right"></i></a>
                   <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
                           class="fas fa-minus"></i></button>
               </div>
@@ -38,10 +38,10 @@
                   </form>
                   <!--Add Button-->
                   <a name="add" id="" class="btn btn-info mr-2 ml-sm-auto" href="#" data-toggle="modal"
-                      data-target="#addCategory" role="button">
+                      data-target="#addProduct" role="button">
                       <i class="fa fa-plus" aria-hidden="true"></i>
                       <span class="d-none d-sm-inline ml-1">
-                          Add Category
+                          Add Product
                       </span>
                   </a>   
               </div>
@@ -49,31 +49,56 @@
               <div class="collapse" id="contentId">
 
               </div>
-              <% if (!Categories.error) { %>
+              <% if (!Products.error) { %>
                   <div class="table-responsive ">
-                      <table class="table table-striped text-center " id="dt_category">
+                      <table class="table table-striped text-center " id="dt_product">
                           <thead>
                               <tr>
                                   <th scope="col">No</th>
-                                  <th scope="col" style="min-width: 144px;" class="col">Category Name</th>
+                                  <th scope="col" style="min-width: 100px;" class="col">Product Name</th>
+                                  <th scope="col" style="min-width: 144px;" class="col">Category</th>
+                                  <th scope="col" style="min-width: 144px;" class="col">Price</th>
+                                  <th scope="col" style="min-width: 200px;" class="col">Description</th>
+                                  <th scope="col" style="min-width: 60px;" class="col">Photo</th>
                                   <th scope="col" style="min-width: 144px;">Action</th>
                               </tr>
                           </thead>
                           <tbody>
                               <% //Tampilkan semua data dari tabel  %>
                               <% let number = 1 %> 
-                              <% Categories.forEach(category => { %>
+                              <% Products.forEach(product => { %>
                                   <tr>
                                       <td scope="row" class="align-middle"><%= number %></td>
-                                      <td class="align-middle"><%= category.name %></td>
-                                      <td>
+                                      <td class="align-middle"><%= product.name %></td>
+                                      <% if (product.category) { %>
+                                        <td class="align-middle"><%= product.category.name %></td>
+                                      <% } else { %>
+                                        <td class="align-middle">_</td>
+                                      <% } %>
+                                      <td class="align-middle"><%= product.price %></td>
+                                      <td class="align-middle"><%= product.description %></td>
+                                      <td class="align-middle">
+                                        <% if (product.photo) { %>
+                                          <button type="submit" name="" id="" class="btn btn-primary btn-sm px-3 mx-1" data-toggle="modal"
+                                          data-target="#photo<%= product.id_product %>">
+                                              <i class="fa fa-eye" aria-hidden="true"></i>
+                                          </button>  
+                                        <% } else { %>
+                                          <button type="submit" name="" id="" class="btn btn-outline-primary btn-sm px-3 mx-1" data-toggle="modal"
+                                          data-target="#photo<%= product.id_product %>">
+                                              <i class="fa fa-eye" aria-hidden="true"></i>
+                                          </button>
+                                        <% } %>
+                                                                                    
+                                      </td>
+                                      <td class="align-middle">
                                           
                                           <button type="submit" name="" id="" class="btn btn-dark btn-sm px-3 mx-1" data-toggle="modal"
-                                          data-target="#edit<%= category.id_category %>"  role="button">
+                                          data-target="#edit<%= product.id_product %>"  role="button">
                                               <i class="fa fa-pencil" aria-hidden="true"></i>
                                           </button>
                                           <button type="submit" name="" id="" class="btn btn-danger btn-sm px-3 mx-1" data-toggle="modal"
-                                          data-target="#delete<%= category.id_category %>">
+                                          data-target="#delete<%= product.id_product %>">
                                                   <i class="fa fa-trash" aria-hidden="true"></i>
                                           </button>                                            
                                       </td>
@@ -85,7 +110,7 @@
               <% } else { %>
                   <div class="d-flex flex-column p-3 align-items-center justify-content-center">
                       <img src="/images/nodata.svg"  alt="no data found" class="w-25 mx-auto">
-                      <h3 class="text-bold text-gray mt-4">No category found</h3>
+                      <h3 class="text-bold text-gray mt-4">No product found</h3>
                   </div>
               <% } %>
               
@@ -95,70 +120,143 @@
       </div>
       <!-- /.card -->
   </div>
-  <!--Modal to Input Category-->
-  <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+  <!--Modal to Input Product-->
+  <div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/admin/products" method="POST" enctype="multipart/form-data">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="inputGroupSelect01">Category</label>
+              <select class="custom-select mb-3" id="inputGroupSelect01" name="id_category" >
+                <% if (!Categories.error) { %>
+                  <% Categories.forEach(category => { %>
+                    <option value="<%= category.id_category %>" ><%= category.name %> </option>
+                  <% }) %>
+                <% } else { %>
+                  <option value="" > No category </option>
+                <% } %>
+                
+              </select>
+
+              <label for="">Product Name</label>
+              <input type="text" class="form-control mb-3" name="name" id="" placeholder="">
+              
+              <label for="">Price</label>
+              <input type="number" class="form-control mb-3" name="price" id="" placeholder="">
+
+              <label for="">Description</label>
+              <input type="text" class="form-control mb-3" name="description" id="" placeholder="">
+
+              <div class="form-group">
+                <label for="image">Product Picture</label>
+                <input type="file" accept="image/*" name="productImg" class="form-control-file" id="image">
               </div>
-              <form action="/admin/categories" method="POST">
-                  <div class="modal-body">
-                      <div class="form-group">
-                          <label for="">Category Name</label>
-                          <input type="text" class="form-control mb-3" name="name" id=""
-                              placeholder="">
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-outline-dark "
-                          data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-dark">Add Category</button>
-                  </div>
-              </form>
+
+            </div>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-primary b" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add Product</button>
+          </div>
+        </form> 
       </div>
+    </div>
   </div>
   <!--End Modal-->
   
-  <% if (!Categories.error) { %>
-  <% Categories.forEach(category => { %>
-      <!--Modal to Edit Category-->
-      <div class="modal fade" id="edit<%= category.id_category %>"   tabindex="-1" aria-labelledby="exampleModalLabel"
+  <% if (!Products.error) { %>
+  <% Products.forEach(product => { %>
+    <!-- Modal Photo -->
+    <div class="modal fade" id="photo<%= product.id_product%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Photo of <%= product.name %> </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body d-flex justify-content-center flex-sm-row flex-column">
+                  
+                  <% if (product.photo) { %>
+                      <img class="rounded-lg img-responsive overflow-hidden" src="/admin/img/<%= product.photo %> "  width="450px" alt="">
+                  <% } else { %>
+                      <img class="rounded-lg img-responsive overflow-hidden w-75 m-sm-3 mx-auto my-3" src="/images/sad.svg" alt="">
+                      <h3 class="my-auto mx-3 text-secondary text-center text-sm-left">Sorry, There is no photo of this product in our data</h3>
+                  <% } %>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+  </div>
+      <!--Modal to Edit Product-->
+      <div class="modal fade" id="edit<%= product.id_product %>"   tabindex="-1" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
                   </div>
-                  <form action="/admin/categories" method="POST">
-                      <input type="hidden" name="id_category" value="<%= category.id_category %> ">
-                      <div class="modal-body">
-                          <div class="form-group">
-                              <label for="">Category Name</label>
-                              <input type="text" class="form-control mb-3" name="name" id=""
-                                  placeholder="" value="<%= category.name %>">
-                          </div>
+                  <form action="/admin/products" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                      <div class="form-group">
+                        <label for="inputGroupSelect01">Category</label>
+                        <input type="hidden" name="id_product" value="<%= product.id_product%> ">
+                        <select class="custom-select mb-3" id="inputGroupSelect01" name="id_category" >
+                          <% if (!Categories.error) { %>
+                            <% Categories.forEach(category => { %>
+                              <% if (category.id_category == product.id_category) { %>
+                                <option value="<%= category.id_category %>" selected><%= category.name %> </option>
+                              <% } else { %>
+                                <option value="<%= category.id_category %>" ><%= category.name %> </option>
+                              <% } %>
+                            <% }) %>
+                          <% } else { %>
+                            <option value="" > No category </option>
+                          <% } %>
+                          
+                        </select>
+          
+                        <label for="">Product Name</label>
+                        <input type="text" class="form-control mb-3" name="name" id="" placeholder="" value="<%= product.name %>">
+                        
+                        <label for="">Price</label>
+                        <input type="number" class="form-control mb-3" name="price" id="" placeholder="" value="<%= product.price %>">
+          
+                        <label for="">Description</label>
+                        <input type="text" class="form-control mb-3" name="description" id="" placeholder="" value="<%= product.description %>">
+          
+                        <div class="">
+                          <label for="image">Product Picture</label>
+                          <input type="file" accept="image/*" name="productImg"  id="image">
+                        </div>
+          
                       </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-outline-dark "
-                              data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-dark">Add Category</button>
-                      </div>
-                  </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-dark">Update Product</button>
+                    </div>
+                  </form> 
               </div>
           </div>
       </div> 
       <!--End Modal-->
       <!-- Modal Delete -->
-      <div class="modal fade" id="delete<%= category.id_category %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="delete<%= product.id_product %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
               <div class="modal-content">
               <div class="modal-header">
@@ -168,12 +266,12 @@
                   </button>
               </div>
               <div class="modal-body">
-                  Are you sure you want to delete this category?
+                  Are you sure you want to delete this product?
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
-                  <form action="/admin/categories/<%= category.id_category %>?_method=DELETE" method="POST" class="d-inline">
-                      <button type="submit" class="btn btn-dark">Delete Category</button>
+                  <form action="/admin/products/<%= product.id_product %>?_method=DELETE" method="POST" class="d-inline">
+                      <button type="submit" class="btn btn-dark">Delete Product</button>
                   </form>
               </div>
               </div>
@@ -185,7 +283,7 @@
   
 </section>
 <script>
-  //membuat tabel category
+  //membuat tabel product
   $(document).ready(function () {
       
       setTimeout(OpenMsg, 500);
@@ -193,7 +291,7 @@
           $('#msgInfo').fadeIn(1500,function() { $(this).addClass("show"); });   
       }
       $.fn.DataTable.ext.pager.numbers_length = 3;
-      const table = $('#dt_category').DataTable({
+      const table = $('#dt_product').DataTable({
           dom: 'Brti<"card-footer d-flex justify-content-start bg-dark rounded-bottom p-0"lp>',
           "paging": true,
           "serverSide": false,
@@ -204,7 +302,7 @@
               {
                   extend: 'excelHtml5',
                   exportOptions: {
-                      columns: [ 0, 1 ]
+                      columns: [ 0, 1,2,3,4 ]
                   }
               },
               

@@ -2,6 +2,29 @@ const express = require('express');
 const router = express.Router();
 const categories = require('../Controller/categoryController.js');
 const users = require('../Controller/userController.js')
+const products = require('../Controller/productController.js')
+const multer  = require('multer')
+const path = require("path");
+// membuat konfigurasi diskStorage multer
+const diskStorage = multer.diskStorage({
+    // konfigurasi folder penyimpanan file
+    destination: function (req, file, cb) {
+      cb(null, path.join(__dirname, "/uploads"));
+    },
+    // konfigurasi penamaan file yang unik
+    filename: function (req, file, cb) {
+        cb(
+          null,
+          file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+        );
+    },
+});
+  
+const upload = multer(
+    { storage: diskStorage }
+)
+
+
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -60,9 +83,27 @@ router.delete('/categories/:id', categories.deleteCategoriesById, function (req,
 });
 
 /* GET products page. */
-router.get('/products', function (req, res, next) {
-    res.render('admin/products', { title: 'Products', layout: './admin/layout.ejs' });
+router.get('/products',  categories.getCategories, products.getProducts,  function (req, res, next) {
+    let Products = res.app.locals.Products
+    let Categories = res.app.locals.Categories
+    let msg = res.app.locals.msg
+    res.render('admin/products', { title: 'Products', layout: './admin/layout.ejs', Products, Categories, msg },(err,html)=>{
+        res.app.locals.msg = null;
+        res.send(html);
+    });
 });
 
+// Create categories
+router.post('/products',  products.upsertProducts, products.uploadFIle, async function (req, res, next) {
+    console.log(res.app.locals.Products);
+    res.locals.msg = res.app.locals.msg;
+    console.log(res.locals.msg)
+    res.redirect(301, '/admin/products');
+});
+
+// Delete products
+router.delete('/products/:id', products.deleteProductsById, function (req, res, next) {
+    res.redirect(301, '/admin/products');
+});
 
 module.exports = router;

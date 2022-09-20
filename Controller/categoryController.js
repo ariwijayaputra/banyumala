@@ -4,12 +4,12 @@ const errHandler =  require("../Helpers/error_helper.js")
 // Create/update Categories
 const upsertCategories = async (req, res, next) => {
 	try {
-		let result = await Categories.upsert(req.body, { where: { id: req.params.id } });
+		let result = await Categories.upsert(req.body, { where: { id_category: req.body.id_category } });
         result=JSON.parse(JSON.stringify(result[0]));
 		res.app.locals.Categories = result;
 		res.app.locals.msg = "Success! Data has been saved";
 	} catch (error) {
-		res.status(500).json(errHandler(error));
+		res.app.locals.Categories=JSON.parse(JSON.stringify(errHandler(error)));
 	}
     next();
 };
@@ -30,7 +30,7 @@ const getCategories = async (req, res, next) => {
         }
         
 	} catch (error) {
-		res.status(500).json(error.message);
+		res.app.locals.Categories=JSON.parse(JSON.stringify(errHandler(error)));
 	}
     next();
 };

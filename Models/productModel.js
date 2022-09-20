@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
-const db = require("../Config/Database.js")
+const db = require("../Config/Database.js");
+const Categories = require("./categoryModel.js");
 const { DataTypes } = Sequelize;
 
 const Products = db.define(
@@ -10,10 +11,7 @@ const Products = db.define(
             autoIncrement: true,
             primaryKey: true
         },
-		id_category: {
-            type: DataTypes.INTEGER,
-			allowNull: false,
-        },
+		
 		name: {
             type: DataTypes.STRING,
 			allowNull: false,
@@ -33,6 +31,10 @@ const Products = db.define(
 		freezeTableName: true,
 	}
 );
+Products.belongsTo(Categories, {
+	foreignKey: "id_category", 
+	onDelete: 'SET NULL'
+});
 
 module.exports = Products;
 
