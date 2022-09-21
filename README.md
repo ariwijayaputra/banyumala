@@ -17,7 +17,7 @@ npm -v
 npm install
 ```
 8. buat file dengan nama ".env" dan isi dengan:
------------------------------------------------------
+```
 PORT="3000"
 
 DATABASE_NAME="banyumala2"
@@ -29,8 +29,7 @@ DATABASE_DIALECT="mysql"
 
 API_KEY=key_goes_here
 API_URL=url_goes_here
------------------------------------------------------
-
+```
 9. install nodemon
 ```bash
 npm install -g nodemon
