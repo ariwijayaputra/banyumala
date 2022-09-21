@@ -1,6 +1,8 @@
 const Sequelize = require("sequelize");
 const db = require("../Config/Database.js")
 const { DataTypes } = Sequelize;
+const Users = require("../Models/userModel.js");
+
 
 const Transactions = db.define(
 	"transactions",
@@ -9,10 +11,6 @@ const Transactions = db.define(
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
-        },
-		id_user: {
-            type: DataTypes.INTEGER,
-			allowNull: false
         },
 		total: {
 			type: DataTypes.INTEGER,
@@ -31,6 +29,11 @@ const Transactions = db.define(
 		freezeTableName: true,
 	}
 );
+
+Transactions.belongsTo(Users, {
+	foreignKey: "id_user", 
+	onDelete: 'SET NULL'
+});
 
 module.exports = Transactions;
 

@@ -3,26 +3,9 @@ const router = express.Router();
 const categories = require('../Controller/categoryController.js');
 const users = require('../Controller/userController.js')
 const products = require('../Controller/productController.js')
-const multer  = require('multer')
+const transactions = require('../Controller/transactionController.js')
+const detailTransaction = require('../Controller/detailTransactionController.js');
 const path = require("path");
-// membuat konfigurasi diskStorage multer
-const diskStorage = multer.diskStorage({
-    // konfigurasi folder penyimpanan file
-    destination: function (req, file, cb) {
-      cb(null, path.join(__dirname, "/uploads"));
-    },
-    // konfigurasi penamaan file yang unik
-    filename: function (req, file, cb) {
-        cb(
-          null,
-          file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-        );
-    },
-});
-  
-const upload = multer(
-    { storage: diskStorage }
-)
 
 
 
@@ -30,6 +13,7 @@ const upload = multer(
 router.get('/', function (req, res, next) {
     res.render('admin/dashboard', { title: 'Dashboard', layout:'./admin/layout.ejs'});
 });
+
 
 /* GET members page. */
 router.get('/members', users.getMembers, function (req, res, next) {
@@ -53,10 +37,19 @@ router.delete('/members/:id', users.deleteUsersById, function (req, res, next) {
     res.redirect(301, '/admin/members');
 });
 
+
 /* GET transaction page. */
-router.get('/transactions', function (req, res, next) {
-    res.render('admin/transactions', { title: 'Transactions', layout: './admin/layout.ejs' });
+router.get('/transactions', detailTransaction.getDetailTransactions, transactions.getTransactions, function (req, res, next) {
+    let Transactions = res.app.locals.Transactions
+    let detailTransaction = res.app.locals.DetailTransactions
+    // console.log(detailTransaction);
+    // detailTransaction.forEach(transaction => {
+    //     console.log(transaction.detail_transactions)
+    // });
+    //console.log(...Transactions);
+    res.render('admin/transactions', { title: 'Transactions', layout: './admin/layout.ejs', Transactions, detailTransaction });
 });
+
 
 /* GET categories page. */
 router.get('/categories', categories.getCategories, function (req, res, next) {
@@ -81,6 +74,7 @@ router.delete('/categories/:id', categories.deleteCategoriesById, function (req,
     console.log(res.app.locals.Categories);
     res.redirect(301, '/admin/categories');
 });
+
 
 /* GET products page. */
 router.get('/products',  categories.getCategories, products.getProducts,  function (req, res, next) {

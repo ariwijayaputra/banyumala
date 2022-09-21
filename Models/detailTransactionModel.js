@@ -1,5 +1,7 @@
 const Sequelize = require("sequelize");
-const db = require("../Config/Database.js")
+const db = require("../Config/Database.js");
+const Transactions = require("../Models/transactionModel.js");
+const Products = require("../Models/productModel.js");
 const { DataTypes } = Sequelize;
 
 const DetailTransaction = db.define(
@@ -10,14 +12,6 @@ const DetailTransaction = db.define(
             autoIncrement: true,
             primaryKey: true
         },
-		id_transaction: {
-            type: DataTypes.INTEGER,
-			allowNull: false,
-        },
-		id_product: {
-            type: DataTypes.INTEGER,
-			allowNull: false,
-        },
 		amount: {
             type: DataTypes.INTEGER,
 			allowNull: false,
@@ -27,6 +21,22 @@ const DetailTransaction = db.define(
 		freezeTableName: true,
 	}
 );
+
+DetailTransaction.belongsTo(Transactions, {
+	foreignKey: "id_transaction", 
+	onDelete: 'SET NULL'
+});
+DetailTransaction.belongsTo(Products, {
+	foreignKey: "id_product", 
+	onDelete: 'SET NULL'
+});
+Transactions.hasMany(DetailTransaction, {
+	foreignKey: "id_transaction", 
+});
+Products.hasMany(DetailTransaction, {
+	foreignKey: "id_product", 
+});
+
 
 module.exports = DetailTransaction;
 

@@ -86,6 +86,5 @@ module.exports = {
     upsertProducts,
     deleteProductsById,
     getProducts,
-
     uploadFIle,
 }
