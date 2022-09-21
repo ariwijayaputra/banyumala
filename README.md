@@ -42,5 +42,16 @@ nodemon
 11. jika tidak ada error buka **localhost:3000/admin** pada browser. akan diarahkan menuju web admin.
 apabila sukses, server dapat dijalankan kembali dengan memasukan perintah nodemon pada terminal. tidak perlu melakukan Initialization lagi
 
-
-
+## Completed page
+- http://localhost:3000/admin/categories
+- http://localhost:3000/admin/products
+- http://localhost:3000/admin/members
+## Half Complete page
+- http://localhost:3000/admin/transactions
+- http://localhost:3000/admin/
+## in Progress
+- http://localhost:3000/login
+- http://localhost:3000/signup
+- http://localhost:3000/bumdes
+- http://localhost:3000/member
+- http://localhost:3000/
