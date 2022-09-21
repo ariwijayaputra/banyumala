@@ -39,7 +39,7 @@ npm install -g nodemon
 nodemon
 ```
 
-11. jika tidak ada error buka localhost:3000/admin pada browser. akan diarahkan menuju web admin.
+11. jika tidak ada error buka **localhost:3000/admin** pada browser. akan diarahkan menuju web admin.
 apabila sukses, server dapat dijalankan kembali dengan memasukan perintah nodemon pada terminal. tidak perlu melakukan Initialization lagi
 
 
