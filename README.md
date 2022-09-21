@@ -12,7 +12,7 @@
 node -v
 npm -v
 ```
-7. install node module yang dibutuhkan dengan mengetikan perintah pada terminal
+7. install node module yang dibutuhkan dengan mengetikan perintah pada terminal. selama tahapan ini pastikan device terkoneksi internet
 ```bash
 npm install
 ```
