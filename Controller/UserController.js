@@ -58,15 +58,44 @@ const deleteUsersById = async (req, res,next) => {
 	next();
 };
 
-// Create/update Members
+// update Members
 const upsertMembers = async (req, res, next) => {
 	try {
-		let result = await Users.upsert(req.body, { where: { id: req.params.id } });
+		console.log(req.body);
+		let result = await Users.upsert(req.body, { where: { id: req.params.id } }).catch(function(err) {
+			// print the error details
+			console.log(err, request.body.username);
+		});
         result=JSON.parse(JSON.stringify(result[0]));
 		res.app.locals.Users = result;
 		res.app.locals.msg = "Success! Data has been saved";
 	} catch (error) {
+		res.app.locals.Users = {error: "Register Failed"};
 		res.status(500).json(errHandler(error));
+	}
+    next();
+};
+
+
+// update Members
+const createMembers = async (req, res, next) => {
+	try {
+		const isExist = await Users.findOne({ where: { username: req.body.username } });
+		if(!isExist){
+			req.body.id_role = 3;
+			let result = await Users.upsert(req.body);
+			result=JSON.parse(JSON.stringify(result[0]));
+			res.app.locals.Users = result;
+			res.app.locals.msg = "Success! Data has been saved";
+		}
+		else{
+			res.app.locals.msg = "Username tidak tersedia";
+		}
+	} catch (error) {
+		console.log(error);
+		res.app.locals.Users = {error: "Register Failed"};
+		res.app.locals.msg = "Username tidak tersedia";
+		//res.status(500).json(errHandler(error));
 	}
     next();
 };
@@ -93,11 +122,36 @@ const getMembers = async (req, res, next) => {
     next();
 };
 
+// upload profile image
+const uploadFIle = async(req,res,next)=>{
+    try {
+        console.log(res.app.locals.Users)
+        if(!req.files) {
+            next();
+        } 
+        else {
+            let profileImg = req.files.profileImg;
+            let imgFormat = profileImg.name;
+            imgFormat = imgFormat.split(".").pop();
+            let imgName = "user"+Number(res.app.locals.Users.id_user)+"."+imgFormat;
+            //Use the mv() method to place the file in upload directory (i.e. "uploads")
+            profileImg.mv('./uploads/' + imgName);
+            Users.update({photo : imgName},{where: {username : res.app.locals.Users.username}})
+            next()
+        }
+    } catch (err) {
+        
+    }
+}
+
 module.exports = {
     upsertUsers,
     deleteUsersById,
     getUsers,
 
 	upsertMembers,
-	getMembers
+	getMembers,
+	createMembers,
+
+	uploadFIle
 }

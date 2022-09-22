@@ -75,10 +75,17 @@
                                         <td class="align-middle"><%= member.address %></td>
                                         <td class="align-middle"><%= member.phone %></td>
                                         <td class="align-middle">
-                                            <button type="submit" name="" id="" class="btn btn-primary btn-sm px-3 mx-1" data-toggle="modal"
-                                            data-target="#photo<%= member.id_user %>">
-                                                <i class="fa fa-eye" aria-hidden="true"></i>
-                                            </button>                                            
+                                            <% if (member.photo) { %>
+                                                <button type="submit" name="" id="" class="btn btn-primary btn-sm px-3 mx-1" data-toggle="modal"
+                                                data-target="#photo<%= member.id_user %>">
+                                                    <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                                </button>  
+                                              <% } else { %>
+                                                <button type="submit" name="" id="" class="btn btn-outline-primary btn-sm px-3 mx-1" data-toggle="modal"
+                                                data-target="#photo<%= member.id_user %>">
+                                                    <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                                </button>
+                                              <% } %>                                          
                                         </td>
                                         <td class="align-middle">                                            
                                             <button type="submit" name="" id="" class="btn btn-danger btn-sm px-3 mx-1" data-toggle="modal"
@@ -121,7 +128,7 @@
                     <div class="modal-body d-flex justify-content-center flex-sm-row flex-column">
                         
                         <% if (member.photo) { %>
-                            <img class="rounded-lg img-responsive overflow-hidden" src="<%= member.photo %>"  width="450px" alt="">
+                            <img class="rounded-lg img-responsive overflow-hidden" src="/admin/img/<%= member.photo %>"  width="450px" alt="">
                         <% } else { %>
                             <img class="rounded-lg img-responsive overflow-hidden w-75 m-sm-3 mx-auto my-3" src="/images/sad.svg" alt="">
                             <h3 class="my-auto mx-3 text-secondary text-center text-sm-left">Sorry, There is no photo of this member on our data</h3>

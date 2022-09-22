@@ -31,11 +31,16 @@ const Users = db.define(
 		username: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			unique: true ,
 			validate: {
 				notEmpty: {
 					msg: "Please enter your username",
-				},
+				}
 			},
+			unique: {
+				args: true,
+				msg: 'Email address already in use!'
+			}
 		},
 		password: {
 			type: DataTypes.STRING,
