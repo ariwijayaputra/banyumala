@@ -64,7 +64,14 @@
                                         <td scope="row" class="align-middle"><%= number %></td>
                                         <td class="align-middle"><%= member.name %></td>
                                         <td class="align-middle"><%= member.username %></td>
-                                        <td class="align-middle"><%= member.gender %></td>
+                                        <td class="align-middle">
+                                            <% if (member.gender == 1) { %>
+                                                Laki Laki
+                                            <% } else { %>
+                                                Perempuan
+                                            <% } %>
+                                            
+                                        </td>
                                         <td class="align-middle"><%= member.address %></td>
                                         <td class="align-middle"><%= member.phone %></td>
                                         <td class="align-middle">

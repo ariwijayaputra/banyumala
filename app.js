@@ -39,7 +39,7 @@ app.use(cookieParser());
 app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static('./node_modules/admin-lte')) 
+//app.use(express.static('./node_modules/admin-lte')) 
 
 app.use('/', indexRouter);
 app.use('/admin',adminRouter);

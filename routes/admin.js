@@ -42,14 +42,22 @@ router.delete('/members/:id', users.deleteUsersById, function (req, res, next) {
 router.get('/transactions', detailTransaction.getDetailTransactions, transactions.getTransactions, function (req, res, next) {
     let Transactions = res.app.locals.Transactions
     let detailTransaction = res.app.locals.DetailTransactions
+    let msg = res.app.locals.msg
     // console.log(detailTransaction);
     // detailTransaction.forEach(transaction => {
     //     console.log(transaction.detail_transactions)
     // });
     //console.log(...Transactions);
-    res.render('admin/transactions', { title: 'Transactions', layout: './admin/layout.ejs', Transactions, detailTransaction });
+    res.render('admin/transactions', { title: 'Transactions', layout: './admin/layout.ejs', Transactions, detailTransaction,msg }, (err,html)=>{
+        res.app.locals.msg = null;
+        res.send(html);
+    });
 });
 
+// Delete products
+router.delete('/transactions/:id', transactions.deleteTransactionsById, function (req, res, next) {
+    res.redirect(301, '/admin/transactions');
+});
 
 /* GET categories page. */
 router.get('/categories', categories.getCategories, function (req, res, next) {
