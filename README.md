@@ -55,3 +55,5 @@ apabila sukses, server dapat dijalankan kembali dengan memasukan perintah nodemo
 - http://localhost:3000/bumdes
 - http://localhost:3000/member
 - http://localhost:3000/
+## Issues
+- harga di detail transaksi seharusnya tidak berubah saat harga produk diubah.
