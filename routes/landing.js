@@ -7,5 +7,22 @@ router.get('/', function (req, res, next) {
     res.render('landing', { title: 'Home', layout: false });
 });
 
+/* GET login page. */
+router.get('/login', function (req, res, next) {
+    let messages = {
+        error:null
+    }
+    res.render('login', { title: 'Home', layout: false , messages});
+});
+
+/* GET login page. */
+router.get('/register', function (req, res, next) {
+    let messages = {
+        error:null
+    }
+    res.render('register', { title: 'Home', layout: false , messages});
+});
+
+
 
 module.exports = router;
