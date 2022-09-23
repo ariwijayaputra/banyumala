@@ -81,6 +81,7 @@ const upsertMembers = async (req, res, next) => {
 const createMembers = async (req, res, next) => {
 	try {
 		const isExist = await Users.findOne({ where: { username: req.body.username } });
+		console.log(isExist);
 		if(!isExist){
 			req.body.id_role = 3;
 			let result = await Users.upsert(req.body);
@@ -126,7 +127,7 @@ const getMembers = async (req, res, next) => {
 const uploadFIle = async(req,res,next)=>{
     try {
         console.log(res.app.locals.Users)
-        if(!req.files) {
+        if(!req.files || res.app.locals.msg === "Username tidak tersedia") {
             next();
         } 
         else {
