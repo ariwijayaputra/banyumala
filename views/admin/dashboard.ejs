@@ -2,13 +2,44 @@
 <section class="content">
   <div class="container-fluid">
     <div class="row my-3 mx-1">
+      <!--Member Card-->
+      <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm">
+          <div class="card-body ">
+            <h5 class=" font-weight-bold text-secondary ">Member</h5>
+            <h3 class="card-text text-primary">
+              <% if (!Members.error) { %>
+                <%= Members.length %>
+              <% } else { %>
+                <span>0</span>  
+              <% } %>
+            </h3>
+            <a href="/admin/members" class="stretched-link">
+              <i class="fa-solid fa-arrow-right" ></i>
+              <span class="ml-1">Details</span>
+            </a>
+            <!--Member icon-->
+            <div class=" position-absolute d-flex justify-content-center  bg-primary rounded-circle "
+              style="width: 56px; height:56px; top:20px; right:20px">
+              <i class="fa-solid fa-user-group fa-lg my-auto "></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end Member Card-->
       <!--Category Card-->
       <div class="col-md-6 col-lg-3">
         <div class="card shadow-sm">
           <div class="card-body ">
             <h5 class=" font-weight-bold text-secondary ">Category</h5>
-            <h3 class="card-text">6</h3>
-            <a href="#">
+            <h3 class="card-text text-primary">
+              <% if (!Categories.error) { %>
+                <%= Categories.length %>
+              <% } else { %>
+                <span>0</span>  
+              <% } %>
+            </h3>
+            <a href="/admin/categories" class="stretched-link">
               <i class="fa-solid fa-arrow-right"></i>
               <span class="ml-1">Details</span>
             </a>
@@ -26,8 +57,14 @@
         <div class="card shadow-sm">
           <div class="card-body ">
             <h5 class=" font-weight-bold text-secondary ">Products</h5>
-            <h3 class="card-text">6</h3>
-            <a href="#">
+            <h3 class="card-text text-primary">
+              <% if (!Products.error) { %>
+                <%= Products.length %>
+              <% } else { %>
+                <span>0</span>  
+              <% } %>
+            </h3>
+            <a href="/admin/products" class="stretched-link">
               <i class="fa-solid fa-arrow-right"></i>
               <span class="ml-1">Details</span>
             </a>
@@ -40,44 +77,82 @@
         </div>
       </div>
       <!--end Product Card-->
-      <!--Tickets Card-->
+      <!--Transaction Card-->
       <div class="col-md-6 col-lg-3">
         <div class="card shadow-sm">
           <div class="card-body ">
-            <h5 class=" font-weight-bold text-secondary ">Tickets Sold</h5>
-            <h3 class="card-text">6</h3>
-            <a href="#">
+            <h5 class=" font-weight-bold text-secondary">Monthly Income</h5>
+            <h3 class="card-text text-primary">
+              Rp. 
+              <% if (!detailTransaction.error) { %>
+                <% let totalTransactions = 0 %> 
+                <% detailTransaction.forEach(transaction => { %>
+                  <% totalTransactions+=transaction.total %> 
+                <% }) %>
+                <%= totalTransactions  %> 
+              <% } else { %>
+                <span>0</span>  
+              <% } %>
+            </h3>
+            <a href="/admin/transactions " class="stretched-link">
               <i class="fa-solid fa-arrow-right"></i>
               <span class="ml-1">Details</span>
             </a>
-            <!--Tickets icon-->
+            <!--Transaction icon-->
             <div class=" position-absolute d-flex justify-content-center  bg-primary rounded-circle "
               style="width: 56px; height:56px; top:20px; right:20px">
-              <i class="fa-solid fa-ticket fa-lg my-auto "></i>
+              <i class="fa-solid fa-money-bill-transfer fa-lg my-auto"></i>
             </div>
           </div>
         </div>
       </div>
-      <!--end Tickets Card-->
-      <!--Camping Card-->
-      <div class="col-md-6 col-lg-3">
-        <div class="card shadow-sm">
-          <div class="card-body ">
-            <h5 class=" font-weight-bold text-secondary ">Tent Sold</h5>
-            <h3 class="card-text">6</h3>
-            <a href="#">
-              <i class="fa-solid fa-arrow-right"></i>
-              <span class="ml-1">Details</span>
-            </a>
-            <!--Camping icon-->
-            <div class=" position-absolute d-flex justify-content-center  bg-primary rounded-circle "
-              style="width: 56px; height:56px; top:20px; right:20px">
-              <i class="fa-solid fa-campground fa-lg my-auto "></i>
-            </div>
-          </div>
-        </div>
+      <!--end Transaction card-->
+      <div class="col-12 my-3">
+        <h3>Sales</h3>
       </div>
-      <!--end Camping Card-->
+      <% let count = 0 %> 
+      <% if (!Categories.error) { %>
+        <% Categories.forEach(category => { %>
+          <!--Categorie list Card-->
+         <div class="col-md-6 col-lg-3">
+           <div class="card shadow-sm">
+             <div class="card-body ">
+               <h5 class=" font-weight-bold text-secondary ">
+                 <% if (category.name.length < 14 ) { %>
+                   <%= category.name %>
+                   <span> Sold</span>
+                 <% } else { %>
+                   <%= category.name.substring(0,13) %>
+                   <span>...</span>
+                 <% } %>
+               </h5>
+               <h3 class="card-text">
+               <% count = 0 %> 
+               <% detailTransaction.forEach(transaction => { %>
+                 <% transaction.detail_transactions.forEach(detail => { %>
+                   <% if (detail.product.id_category == category.id_category) { %>
+                     <% count+=detail.amount %> 
+                   <% } %> 
+                 <% }) %>
+               <% }) %>
+               <%= count %> 
+               </h3>
+               <a href="admin/categories" class="text-success stretched-link">
+                 <i class="fa-solid fa-arrow-right"></i>
+                 <span class="ml-1">Details</span>
+               </a>
+               <!--Dollar icon-->
+               <div class=" position-absolute d-flex justify-content-center  bg-success rounded-circle "
+                 style="width: 56px; height:56px; top:20px; right:20px">
+                 <i class="fa-solid fa-dollar-sign fa-lg my-auto "></i>
+               </div>
+             </div>
+           </div>
+         </div>
+         <!--Categorie list Card-->
+         <% }) %>
+      <% } %>
+      
     </div>
 
     <div class="card card-dark m-3">
@@ -136,28 +211,22 @@
 <!--Chart Custom-->
 <script>
   const ctx = document.getElementById('myChart').getContext('2d');
+
+  ProductSold = <%- ProductSold %>
+  console.log(Object.keys(ProductSold));
+  console.log(Object.values(ProductSold));
   const myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      labels: Object.keys(ProductSold),
       datasets: [{
         label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
+        data: Object.values(ProductSold),
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
+          'rgba(99, 255, 132, 0.2)'
         ],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
+          'rgba(99, 255, 132, 1)'
         ],
         borderWidth: 1
       }]

@@ -10,8 +10,31 @@ const path = require("path");
 
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('admin/dashboard', { title: 'Dashboard', layout:'./admin/layout.ejs'});
+router.get('/', categories.getCategories, products.getProducts, detailTransaction.getDetailTransactions, users.getMembers, function (req, res, next) {
+    let Categories = res.app.locals.Categories
+    let detailTransaction = res.app.locals.DetailTransactions
+    let Members = res.app.locals.Members
+    let Products = res.app.locals.Products
+    let ProductSold = {}
+    Products.forEach(product => {
+        ProductSold[product.name] = 0;
+    });
+    console.log(detailTransaction)
+    detailTransaction.forEach(transaction => {
+        transaction.detail_transactions.forEach(detail => {
+            console.log(detail.product.name)
+            console.log(detail.amount)
+            if(ProductSold[detail.product.name]){
+                ProductSold[detail.product.name] += detail.amount
+            }
+            else
+            {
+                ProductSold[detail.product.name] = detail.amount
+            }
+        })
+    });
+    ProductSold = JSON.stringify(ProductSold);
+    res.render('admin/dashboard', { title: 'Dashboard', layout:'./admin/layout.ejs', Categories, ProductSold, detailTransaction, Members});
 });
 
 
@@ -27,7 +50,7 @@ router.get('/members', users.getMembers, function (req, res, next) {
 });
 
 // Create members
-router.post('/members', users.upsertMembers, function (req, res, next) {
+router.post('/members', users.upsertMembers,  function (req, res, next) {
     res.locals.msg = res.app.locals.msg;
     res.redirect(301, '/admin/members');
 });
