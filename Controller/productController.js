@@ -74,7 +74,8 @@ const uploadFIle = async(req,res,next)=>{
             let imgName = "product"+Number(res.app.locals.Products.id_product)+"."+imgFormat;
             //Use the mv() method to place the file in upload directory (i.e. "uploads")
             productImg.mv('./uploads/' + imgName);
-            Products.update({photo : imgName},{where: {id_product : res.app.locals.Products.id_product}})
+            await Products.update({photo : imgName},{where: {id_product : res.app.locals.Products.id_product}})
+            res.app.locals.Products.photo = imgName;
             next()
         }
     } catch (err) {

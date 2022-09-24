@@ -123,6 +123,27 @@ const getMembers = async (req, res, next) => {
     next();
 };
 
+// GET all members. select all user where id role = 3 (member)
+const getMemberbyID = async (req, res, next) => {
+	try {
+		let result = await Users.findOne({
+			where: { id_role: 3, id_user:req.params.id }
+		});
+		if(result == ""){
+            res.app.locals.Members = {
+                error: "no user exist"
+            };
+        }else{
+            result=JSON.parse(JSON.stringify(result));
+            res.app.locals.Members = result;
+			
+        }
+	} catch (error) {
+		res.status(500).json(error.message);
+	}
+    next();
+};
+
 // upload profile image
 const uploadFIle = async(req,res,next)=>{
     try {
@@ -153,6 +174,6 @@ module.exports = {
 	upsertMembers,
 	getMembers,
 	createMembers,
-
+	getMemberbyID,
 	uploadFIle
 }

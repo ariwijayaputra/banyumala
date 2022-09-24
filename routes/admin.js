@@ -16,23 +16,28 @@ router.get('/', categories.getCategories, products.getProducts, detailTransactio
     let Members = res.app.locals.Members
     let Products = res.app.locals.Products
     let ProductSold = {}
-    Products.forEach(product => {
-        ProductSold[product.name] = 0;
-    });
+    if(!Products.error){
+        Products.forEach(product => {
+            ProductSold[product.name] = 0;
+        });
+    }
+    if(!detailTransaction.error){
+        detailTransaction.forEach(transaction => {
+            transaction.detail_transactions.forEach(detail => {
+                console.log(detail.product.name)
+                console.log(detail.amount)
+                if(ProductSold[detail.product.name]){
+                    ProductSold[detail.product.name] += detail.amount
+                }
+                else
+                {
+                    ProductSold[detail.product.name] = detail.amount
+                }
+            })
+        });
+    }
     console.log(detailTransaction)
-    detailTransaction.forEach(transaction => {
-        transaction.detail_transactions.forEach(detail => {
-            console.log(detail.product.name)
-            console.log(detail.amount)
-            if(ProductSold[detail.product.name]){
-                ProductSold[detail.product.name] += detail.amount
-            }
-            else
-            {
-                ProductSold[detail.product.name] = detail.amount
-            }
-        })
-    });
+    
     ProductSold = JSON.stringify(ProductSold);
     res.render('admin/dashboard', { title: 'Dashboard', layout:'./admin/layout.ejs', Categories, ProductSold, detailTransaction, Members});
 });
@@ -66,19 +71,20 @@ router.get('/transactions', detailTransaction.getDetailTransactions, transaction
     let Transactions = res.app.locals.Transactions
     let detailTransaction = res.app.locals.DetailTransactions
     let msg = res.app.locals.msg
-    // console.log(detailTransaction);
-    // detailTransaction.forEach(transaction => {
-    //     console.log(transaction.detail_transactions)
-    // });
-    //console.log(...Transactions);
     res.render('admin/transactions', { title: 'Transactions', layout: './admin/layout.ejs', Transactions, detailTransaction,msg }, (err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
     });
 });
 
-// Delete products
+// Delete transaction
 router.delete('/transactions/:id', transactions.deleteTransactionsById, function (req, res, next) {
+    res.redirect(301, '/admin/transactions');
+});
+
+// Create transaction
+router.post('/transactions', transactions.updateTransaction, async function (req, res, next) {
+    res.locals.msg = res.app.locals.msg;
     res.redirect(301, '/admin/transactions');
 });
 
@@ -118,7 +124,7 @@ router.get('/products',  categories.getCategories, products.getProducts,  functi
     });
 });
 
-// Create categories
+// Create product
 router.post('/products',  products.upsertProducts, products.uploadFIle, async function (req, res, next) {
     console.log(res.app.locals.Products);
     res.locals.msg = res.app.locals.msg;

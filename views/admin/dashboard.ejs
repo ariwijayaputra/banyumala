@@ -81,7 +81,7 @@
       <div class="col-md-6 col-lg-3">
         <div class="card shadow-sm">
           <div class="card-body ">
-            <h5 class=" font-weight-bold text-secondary">Monthly Income</h5>
+            <h5 class=" font-weight-bold text-secondary">Income</h5>
             <h3 class="card-text text-primary">
               Rp. 
               <% if (!detailTransaction.error) { %>
@@ -127,14 +127,17 @@
                  <% } %>
                </h5>
                <h3 class="card-text">
-               <% count = 0 %> 
-               <% detailTransaction.forEach(transaction => { %>
-                 <% transaction.detail_transactions.forEach(detail => { %>
-                   <% if (detail.product.id_category == category.id_category) { %>
-                     <% count+=detail.amount %> 
-                   <% } %> 
-                 <% }) %>
-               <% }) %>
+               <% count = 0 %>
+               <% if (!detailTransaction.error) { %>
+                <% detailTransaction.forEach(transaction => { %>
+                  <% transaction.detail_transactions.forEach(detail => { %>
+                    <% if (detail.product.id_category == category.id_category) { %>
+                      <% count+=detail.amount %> 
+                    <% } %> 
+                  <% }) %>
+                <% }) %>
+               <% } %> 
+               
                <%= count %> 
                </h3>
                <a href="admin/categories" class="text-success stretched-link">
@@ -158,38 +161,7 @@
     <div class="card card-dark m-3">
       <div class="card-header d-flex justify-content-center">
         <h5 class=" my-auto mr-auto">Sales Chart</h4>
-        <div class="btn-group">
-          <div class="dropdown">
-            <button type="button" class="btn btn-dark dropdown-toggle px-2" data-toggle="dropdown" aria-expanded="false">
-              Aug
-            </button>
-            <div class="dropdown-menu bg-white rounded-lg">
-              <a class="dropdown-item" href="#">January</a>
-              <a class="dropdown-item" href="#">February</a>
-              <a class="dropdown-item" href="#">March</a>
-              <a class="dropdown-item" href="#">April</a>
-              <a class="dropdown-item" href="#">May</a>
-              <a class="dropdown-item" href="#">June</a>
-              <a class="dropdown-item" href="#">July</a>
-              <a class="dropdown-item" href="#">Augustus</a>
-              <a class="dropdown-item" href="#">September</a>
-              <a class="dropdown-item" href="#">October</a>
-              <a class="dropdown-item" href="#">November</a>
-              <a class="dropdown-item" href="#">December</a>
-            </div>
-          </div>
-          <div class="dropdown">
-            <button type="button" class="btn btn-dark dropdown-toggle px-2" data-toggle="dropdown" aria-expanded="false">
-              2022
-            </button>
-            <div class="dropdown-menu bg-white rounded-lg">
-              <a class="dropdown-item" href="#">2022</a>
-              <a class="dropdown-item" href="#">2021</a>
-
-            </div>
-          </div>
-          
-        </div>
+        
         <div class="card-tools my-auto">
           <!-- This will cause the card to collapse when clicked -->
           <button type="button" class="btn btn-tool"><i class="fa-solid fa-arrow-rotate-right"></i></button>

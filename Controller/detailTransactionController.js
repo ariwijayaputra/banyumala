@@ -16,7 +16,33 @@ const upsertDetailTransactions = async (req, res, next) => {
     next();
 };
 
-
+// GET all data DetailTransactions by User
+const getDetailTransactionsUser = async (req, res, next) => {
+	try {
+		let result = await Transactions.findAll(
+            { 
+                include: [
+                    {
+                        model: DetailTransactions,
+                        include: [{model: Products}]
+                    }
+                ],
+				where : {id_user: req.params.id}
+            }
+        );
+		if(result == ""){
+            res.app.locals.DetailTransactions = {
+                error: "no detailTransaction exist"
+            };
+        }else{
+            result=JSON.parse(JSON.stringify(result));
+            res.app.locals.DetailTransactions = result;
+        }
+	} catch (error) {
+        res.app.locals.DetailTransactions=JSON.parse(JSON.stringify(errHandler(error)));
+	}
+    next();
+};
 // GET all data DetailTransactions
 const getDetailTransactions = async (req, res, next) => {
 	try {
@@ -71,4 +97,5 @@ module.exports = {
     upsertDetailTransactions,
     deleteDetailTransactionsById,
     getDetailTransactions,
+	getDetailTransactionsUser
 }

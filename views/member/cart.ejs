@@ -1,0 +1,258 @@
+
+<div class="d-flex align-items-stretch m-3">
+    <div class=" w-100 text-left p-3">
+        <% if (msg) { %>
+            <div class="alert alert-success alert-dismissible fade text-center m-3" role="alert" id="msgInfo">
+                <strong><%= msg %> </strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <% } %>
+        
+        
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive ">
+                    <table class="table table-striped text-center " id="dt_category">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="min-height: 96px;">Photo</th>
+                                <th scope="col" style="min-width: 144px;" class="col">Product Name</th>
+                                <th scope="col" style="min-width: 104px;">Price</th>
+                                <th scope="col" style="min-width: 200px;" class="col">Quantity</th>
+                                <th scope="col" style="min-width: 144px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% let totalItems = 0 %>
+                            <% let totalPrice = 0 %> 
+                            <% if (!Cart.error) { %>
+                                <% Cart.forEach(userCart => { %>
+                                    
+                                    <% userCart.carts.forEach(cart => { %>
+                                        <% totalItems += cart.amount %> 
+                                        <% totalPrice += (cart.product.price*cart.amount) %>
+                                        <tr>
+                                            <td scope="row" class="align-middle">
+                                                <img src="/admin/img/<%= cart.product.photo %>" style="max-width: 96px;" alt="">
+                                            </td>
+                                            <td class="align-middle"><%= cart.product.name %> </td>
+                                            <td class="align-middle" id="price<%= cart.id_cart %>"><%= cart.product.price %></td>
+                                            <td class="align-middle">
+                                                <div class="input-group w-sm-25 mx-auto">
+                                                    <div class="input-group-prepend">
+                                                        <button class="btn btn-outline-secondary" onclick="substract('<%= cart.id_cart %>', '<%= cart.id_product %>')"
+                                                            type="button" id="button-addon1">
+                                                            <i class="fa fa-minus" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                    <input type="text" id="quantity<%= cart.id_cart %>" name="amount"
+                                                        class="form-control border-secondary text-center bg-white " placeholder="0"
+                                                        aria-label="Example text with button addon" aria-describedby="button-addon1"
+                                                        value="<%= cart.amount %>">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary" onclick="add('<%= cart.id_cart %>', '<%= cart.id_product %>')"
+                                                            type="button" id="button-addon1">
+                                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle">
+                                                <button type="submit" name="" id="" class="btn btn-danger btn-sm px-3 mx-1"
+                                                    data-toggle="modal" data-target="#delete<%= cart.id_cart %>">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <!-- Modal Delete -->
+                                        <div class="modal fade" id="delete<%= cart.id_cart %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete <%= cart.product.name %>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                                                    <form action="/member/delete_cart/<%= cart.id_cart %>?_method=DELETE" method="POST" class="d-inline">
+                                                        <input type="hidden" name="id_user" value="<%= userCart.id_user %>" >
+                                                        <button type="submit" class="btn btn-dark">Delete Category</button>
+                                                    </form>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                    
+                                <% }) %>
+                            <% } %>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card col-12 col-md-5 col-lg-4 p-3">
+            <div class="card-header">Summary</div>
+            <div class="card-body d-flex">
+                <div class="col-7">
+                    <p>Items</p>
+                    <p>Total</p>
+                </div>
+                <div class="col-1">
+                    <p>:</p>
+                    <p>:</p>
+                </div>
+                <div class="col-4">
+                    <p id="totalItems"><%= totalItems %></p>
+                    <p id="totalPrice"><%= totalPrice %></p>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-toggle="modal"
+                data-target="#addPayment">Checkout</button>
+        </div>
+        <!--Modal to Input Payment-->
+        <div class="modal fade" id="addPayment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirm Payment</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <% if (!Cart.error) { %>
+                        <% Cart.forEach(userCart => { %>
+                            <form action="/member/payment/<%= userCart.id_user %>"  method="POST" enctype="multipart/form-data">
+
+                            <div class="modal-body">
+                                <table class="table p-5">
+                                    <tr>
+                                        <th class="col">Product</th>
+                                        <th>Price</th>
+                                        <th>Qty</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                    
+                                    <% userCart.carts.forEach(cart => { %>
+                                        <tr>
+                                            <td><%= cart.product.name %> </td>
+                                            <td id="checkPrice<%= cart.id_cart %>"><%= cart.product.price %></td>
+                                            <td id="checkQty<%= cart.id_cart %>"><%= cart.amount %></td>
+                                            <td id="subTotal<%= cart.id_cart %>"><%=( cart.amount * cart.product.price) %></td>
+                                        </tr>
+                                    <% }) %>
+                                    
+
+                                </table>
+                                <ul class="list-group my-3">
+                                    <li class="list-group-item active d-flex justify-content-between">
+                                        <div>Total</div>
+                                        <div id="grandTotal"><script>$('#grandTotal').text($('#totalPrice').text())</script></div>
+                                    </li>
+                                </ul>
+                                <p>please transfer to account: <strong>BCA 1233457</strong>
+                                    and upload the transfer receipt below</p>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                    <span class="input-group-text">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                    <input type="file" name="payment" required class="custom-file-input" id="inputGroupFile02" required>
+                                    <label class="custom-file-label" for="inputGroupFile02">Transfer Receipt</label>
+                                    </div>
+                                    <input type="hidden" name="id_user" id="id_user" value="<%= userCart.id_user %>">
+                                    <input type="hidden" name="total" id="total" value="<%= totalPrice %>" >
+                                    <input type="hidden" name="status" id="status" value="Pending">
+                                    <input type="hidden" name="productAmount" id="productAmount">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                
+                            </div>
+                            </form>    
+                        <% }) %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <!--End Modal-->
+    </div>
+</div>
+<script>
+    $('#inputGroupFile02').on('change',function(){
+        //get the file name
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        var cleanFileName = fileName.replace('C:\\fakepath\\', " ");
+        $(this).next('.custom-file-label').html(cleanFileName);
+    })
+</script>
+<% if (!Cart.error) { %>
+    <% console.log(Cart[0].carts) %>
+    <% let detail = JSON.stringify(Cart[0].carts) %>  
+    <script>let detailTransaksi = <%- detail %></script>
+<% } %>
+
+<script>
+    $(document).ready(function () {
+        setTimeout(OpenMsg, 500);
+        function OpenMsg(){
+            $('#msgInfo').fadeIn(1500,function() { $(this).addClass("show"); });   
+        }
+        
+        detailTransaksi.forEach(detail => {
+            detailTransaction[detail.id_product] = detail.amount
+        })
+        $('#productAmount').val(JSON.stringify(detailTransaction))
+    })
+</script>
+
+<script>
+    let detailTransaction = {}
+    function updateTotal(price, qty){
+        let totalPrice = Number($('#totalPrice').text())
+        let totalItems = Number($('#totalItems').text())
+        totalItems += qty
+        totalPrice += price
+        $('#totalItems').text(totalItems)
+        $('#totalPrice').text(totalPrice)
+        $('#grandTotal').text($('#totalPrice').text())
+        $('#total').val($('#totalPrice').text())
+        console.log($('#total').val())
+    }
+    function add(id, id_product) {
+        let qty = $('#quantity'+id).val()
+        let price = Number($('#price'+id).text())
+        qty++
+        updateTotal(price, +1)
+        $('#checkQty'+id).text(qty)
+        $('#subTotal'+id).text((qty*price))
+        $('#quantity'+id).val(qty)
+        detailTransaction[id_product] = qty
+        $('#productAmount').val(JSON.stringify(detailTransaction))
+    }
+    function substract(id,id_product) {
+        let qty = $('#quantity'+id).val()
+        let price = Number($('#price'+id).text())
+        if (qty > 1) {
+            qty--
+            updateTotal(-price, -1)
+        }
+        $('#checkQty'+id).text(qty)
+        $('#subTotal'+id).text((qty*price))
+        $('#quantity'+id).val(qty)
+        detailTransaction[id_product] = qty
+        $('#productAmount').val(JSON.stringify(detailTransaction))
+    }
+</script>

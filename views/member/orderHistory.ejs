@@ -13,7 +13,7 @@
                 <h5 class=" my-auto mr-auto">Data Transactions</h5>
                 <div class="card-tools my-auto">
                     <!-- This will cause the card to collapse when clicked -->
-                    <a type="button" class="btn btn-tool" href="/admin/transactions" id="reload"><i class="fa-solid fa-arrow-rotate-right"></i></a>
+                    <a type="button" class="btn btn-tool" href="/member/history/1" id="reload"><i class="fa-solid fa-arrow-rotate-right"></i></a>
                     <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
                             class="fas fa-minus"></i></button>
                 </div>
@@ -44,27 +44,27 @@
                             <thead>
                                 <tr>
                                     <th scope="col">No</th>
-                                    <th scope="col" style="min-width: 144px;" class="col">Member Name</th>
+                                    
                                     <th scope="col" style="min-width: 144px;" class="col">Transaction Date</th>
                                     <th scope="col" style="min-width: 144px;" class="col">Total Transaction</th>
                                     <th scope="col" style="min-width: 80px;" class="col">Type</th>
                                     <th scope="col" style="min-width: 100px;" class="col">Payment URL</th>
                                     <th scope="col" style="min-width: 100px;" class="col">Status</th>
                                     <th scope="col" style="min-width: 50px;" class="col">Details</th>
-                                    <th scope="col" style="min-width: 50px;">Action</th>
+              
                                 </tr>
                             </thead>
                             <tbody>
                                 <% //Tampilkan semua data dari tabel  %>
                                 <% let number = 1 ;  let date %> 
-                                <% Transactions.forEach(transaction => { %>
+                                <% detailTransaction.forEach(transaction => { %>
                                   <% 
                                     date = new Date(transaction.createdAt);
                                     date = date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear()
                                   %> 
                                   <tr>
                                       <td scope="row" class="align-middle"><%= number %></td>
-                                      <td class="align-middle"><%=transaction.user.name %></td>
+                                      
                                       <td class="align-middle"><%=date %></td>
                                       <td class="align-middle"><%=transaction.total %></td>
                                       <td class="align-middle">Bank Trf</td>
@@ -91,12 +91,7 @@
                                               <i class="fa-solid fa-eye" aria-hidden="true"></i>
                                           </button>  
                                       </td>
-                                      <td class="align-middle">
-                                          <button type="submit" name="" id="" class="btn btn-danger btn-sm px-3 mx-1" data-toggle="modal"
-                                          data-target="#delete<%= transaction.id_transaction %>">
-                                                  <i class="fa fa-trash" aria-hidden="true"></i>
-                                          </button>                                            
-                                      </td>
+                                      
                                   </tr>
                                   <!-- Modal Photo -->
                                 <div class="modal fade" id="photo<%= transaction.id_transaction%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -195,29 +190,7 @@
           </div>
       </div>
       <!-- Modal Delete -->
-        <!-- Modal Delete -->
-        <div class="modal fade" id="delete<%= transaction.id_transaction %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this transaction?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
-                    <form action="/admin/transactions/<%= transaction.id_transaction %>?_method=DELETE" method="POST" class="d-inline">
-                        <button type="submit" class="btn btn-dark">Delete Transaction</button>
-                    </form>
-                </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal Delete -->
+        
     <% i=1})} %>  
     
     

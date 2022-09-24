@@ -1,31 +1,20 @@
 const Sequelize = require("sequelize");
 const db = require("../Config/Database.js")
 const { DataTypes } = Sequelize;
-const Users = require("../Models/userModel.js");
+const Users = require("./UserModel");
+const Products = require("./productModel");
 
-
-const Transactions = db.define(
-	"transactions",
+const Cart = db.define(
+	"cart",
 	{
-		id_transaction: {
+		id_cart: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-		total: {
+		amount:{
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			validate: {
-				notEmpty: {
-					msg: "Please enter your transaction amount",
-				},
-			},
-		},
-		status: {
-			type: DataTypes.STRING
-		},
-		payment: {
-			type: DataTypes.STRING
 		}
 	},
 	{
@@ -33,12 +22,24 @@ const Transactions = db.define(
 	}
 );
 
-Transactions.belongsTo(Users, {
+Cart.belongsTo(Users, {
 	foreignKey: "id_user", 
 	onDelete: 'SET NULL'
 });
+Cart.belongsTo(Products, {
+	foreignKey: "id_product", 
+	onDelete: 'SET NULL'
+});
+Users.hasMany(Cart,{
+    foreignKey: "id_user", 
+})
+Products.hasMany(Cart,{
+	foreignKey: "id_product", 
+})
 
-module.exports = Transactions;
+
+
+module.exports = Cart;
 
 (async () => {
 	await db.sync();
