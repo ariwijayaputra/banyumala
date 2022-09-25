@@ -1,11 +1,11 @@
 
 function checkAutinticated(req, res, next){
-    console.log(req.isAuthenticated())
+    //console.log(req.isAuthenticated())
     if(req.isAuthenticated()){
         return next()
     }else{
         console.log("not auth")
-        
+        res.redirect(302,'/login/')
     }
     
 }
@@ -14,13 +14,13 @@ function checkRoleMember( req, res, next){
         if(req.params.id == req.user.id_user){
             return next()
         }
-        return res.redirect(301,'/member/'+String(req.user.id_user))
+        return res.redirect(302,'/member/'+String(req.user.id_user))
     }
     else if(req.user.id_role == 2){
-        return res.redirect(301,'/bumdes/')
+        return res.redirect(302,'/bumdes/')
     }
     else if(req.user.id_role == 1){
-        return res.redirect(301,'/admin/')
+        return res.redirect(302,'/admin/')
     }
 }
 function checkRoleAdmin( req, res, next){
@@ -31,11 +31,11 @@ function checkRoleAdmin( req, res, next){
     }
     else if(req.user.id_role == 2){
         console.log("not admin")
-        return res.redirect(301,'/bumdes/')
+        return res.redirect(302,'/bumdes/')
     }
     else if(req.user.id_role == 3){
         console.log("not admin")
-        return res.redirect(301,'/member/'+String(req.user.id_user))
+        return res.redirect(302,'/member/'+String(req.user.id_user))
     }
 }
 function checkRoleBumdes( req, res, next){
@@ -43,10 +43,10 @@ function checkRoleBumdes( req, res, next){
         return next()
     }
     else if(req.user.id_role == 1){
-        return res.redirect(301,'/member/'+String(req.user.id_user))
+        return res.redirect(302,'/member/'+String(req.user.id_user))
     }
     else if(req.user.id_role == 1){
-        return res.redirect(301,'/admin/')
+        return res.redirect(302,'/admin/')
     }
 }
 module.exports = {

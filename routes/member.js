@@ -50,7 +50,7 @@ router.post('/payment/:id',auth.checkAutinticated,auth.checkRoleMember, Transact
 });
 
 
-/* GET transaction page. */
+/* GET history page. */
 router.get('/history/:id',auth.checkAutinticated,auth.checkRoleMember, DetailTransaction.getDetailTransactionsUser, Transactions.getTransactions, function (req, res, next) {
     let detailTransaction = res.app.locals.DetailTransactions
     let msg = res.app.locals.msg

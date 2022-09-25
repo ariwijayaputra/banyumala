@@ -114,12 +114,8 @@
                                                       <% } %>
                                                   </div>
                                                   <div class="modal-footer">
-                                                      <form action="/admin/transactions" method="POST">
-                                                          <input type="hidden" name="id_transaction" value="<%= transaction.id_transaction %>" >
-                                                          <button type="submit" name="status" class="btn btn-danger" value="Refused">Refuse</button>
-                                                          <button type="submit" name="status" class="btn btn-success" value="Success">Confirm Payment</button>
+                                                      
                                                           <button type="submit" name="status" class="btn btn-dark" data-dismiss="modal">Close</button>
-                                                      </form>
                                                   </div>
                                               </div>
                                           </div>
