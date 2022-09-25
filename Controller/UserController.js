@@ -1,5 +1,6 @@
 const Users = require("../Models/userModel.js")
 const errHandler =  require("../Helpers/error_helper.js")
+const bcrypt = require('bcrypt');
 
 // Create/update Users
 const upsertUsers = async (req, res, next) => {
@@ -83,6 +84,8 @@ const createMembers = async (req, res, next) => {
 		const isExist = await Users.findOne({ where: { username: req.body.username } });
 		console.log(isExist);
 		if(!isExist){
+			const hashedPassword = await bcrypt.hash(req.body.password, 10);
+			req.body.password = hashedPassword;
 			req.body.id_role = 3;
 			let result = await Users.upsert(req.body);
 			result=JSON.parse(JSON.stringify(result[0]));
@@ -90,6 +93,7 @@ const createMembers = async (req, res, next) => {
 			res.app.locals.msg = "Success! Data has been saved";
 		}
 		else{
+			console.log("tidak tersedia")
 			res.app.locals.msg = "Username tidak tersedia";
 		}
 	} catch (error) {

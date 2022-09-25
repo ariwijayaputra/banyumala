@@ -51,7 +51,7 @@
                                     <th scope="col" style="min-width: 100px;" class="col">Payment URL</th>
                                     <th scope="col" style="min-width: 100px;" class="col">Status</th>
                                     <th scope="col" style="min-width: 50px;" class="col">Details</th>
-                                    <th scope="col" style="min-width: 50px;">Action</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -91,12 +91,7 @@
                                               <i class="fa-solid fa-eye" aria-hidden="true"></i>
                                           </button>  
                                       </td>
-                                      <td class="align-middle">
-                                          <button type="submit" name="" id="" class="btn btn-danger btn-sm px-3 mx-1" data-toggle="modal"
-                                          data-target="#delete<%= transaction.id_transaction %>">
-                                                  <i class="fa fa-trash" aria-hidden="true"></i>
-                                          </button>                                            
-                                      </td>
+                                      
                                   </tr>
                                   <!-- Modal Photo -->
                                 <div class="modal fade" id="photo<%= transaction.id_transaction%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -118,12 +113,8 @@
                                                 <% } %>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="/admin/transactions" method="POST">
-                                                    <input type="hidden" name="id_transaction" value="<%= transaction.id_transaction %>" >
-                                                    <button type="submit" name="status" class="btn btn-danger" value="Refused">Refuse</button>
-                                                    <button type="submit" name="status" class="btn btn-success" value="Success">Confirm Payment</button>
-                                                    <button type="submit" name="status" class="btn btn-dark" data-dismiss="modal">Close</button>
-                                                </form>
+                                                <button type="submit" name="status" class="btn btn-dark" data-dismiss="modal">Close</button>
+                                            
                                             </div>
                                         </div>
                                     </div>
@@ -242,7 +233,7 @@
                 {
                     extend: 'excelHtml5',
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3, 4 ,6 ]
+                        columns: [ 0, 1, 2, 3, 4, 6 ]
                     }
                 },
                 

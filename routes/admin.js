@@ -6,11 +6,11 @@ const products = require('../Controller/productController.js')
 const transactions = require('../Controller/transactionController.js')
 const detailTransaction = require('../Controller/detailTransactionController.js');
 const path = require("path");
-
+const auth = require("../Helpers/authentication.js")
 
 
 /* GET home page. */
-router.get('/', categories.getCategories, products.getProducts, detailTransaction.getDetailTransactions, users.getMembers, function (req, res, next) {
+router.get('/', auth.checkAutinticated, auth.checkRoleAdmin, categories.getCategories, products.getProducts, detailTransaction.getDetailTransactions, users.getMembers, function (req, res, next) {
     let Categories = res.app.locals.Categories
     let detailTransaction = res.app.locals.DetailTransactions
     let Members = res.app.locals.Members
@@ -44,7 +44,7 @@ router.get('/', categories.getCategories, products.getProducts, detailTransactio
 
 
 /* GET members page. */
-router.get('/members', users.getMembers, function (req, res, next) {
+router.get('/members', auth.checkAutinticated, auth.checkRoleAdmin, users.getMembers, function (req, res, next) {
     let Members = res.app.locals.Members
     let msg = res.app.locals.msg
     console.log(Members)
@@ -55,7 +55,7 @@ router.get('/members', users.getMembers, function (req, res, next) {
 });
 
 // Create members
-router.post('/members', users.upsertMembers,  function (req, res, next) {
+router.post('/members', auth.checkAutinticated, auth.checkRoleAdmin, users.upsertMembers,  function (req, res, next) {
     res.locals.msg = res.app.locals.msg;
     res.redirect(301, '/admin/members');
 });
@@ -67,7 +67,7 @@ router.delete('/members/:id', users.deleteUsersById, function (req, res, next) {
 
 
 /* GET transaction page. */
-router.get('/transactions', detailTransaction.getDetailTransactions, transactions.getTransactions, function (req, res, next) {
+router.get('/transactions', auth.checkAutinticated, auth.checkRoleAdmin, detailTransaction.getDetailTransactions, transactions.getTransactions, function (req, res, next) {
     let Transactions = res.app.locals.Transactions
     let detailTransaction = res.app.locals.DetailTransactions
     let msg = res.app.locals.msg
@@ -78,7 +78,7 @@ router.get('/transactions', detailTransaction.getDetailTransactions, transaction
 });
 
 // Delete transaction
-router.delete('/transactions/:id', transactions.deleteTransactionsById, function (req, res, next) {
+router.delete('/transactions/:id', auth.checkAutinticated, auth.checkRoleAdmin, transactions.deleteTransactionsById, function (req, res, next) {
     res.redirect(301, '/admin/transactions');
 });
 
@@ -89,7 +89,7 @@ router.post('/transactions', transactions.updateTransaction, async function (req
 });
 
 /* GET categories page. */
-router.get('/categories', categories.getCategories, function (req, res, next) {
+router.get('/categories', auth.checkAutinticated, auth.checkRoleAdmin, categories.getCategories, function (req, res, next) {
     let Categories = res.app.locals.Categories
     let msg = res.app.locals.msg
     res.render('admin/categories', { title: 'Categories', layout: './admin/layout.ejs', Categories, msg }, (err,html)=>{
@@ -99,7 +99,7 @@ router.get('/categories', categories.getCategories, function (req, res, next) {
 });
 
 // Create categories
-router.post('/categories', categories.upsertCategories, function (req, res, next) {
+router.post('/categories', auth.checkAutinticated, auth.checkRoleAdmin, categories.upsertCategories, function (req, res, next) {
     console.log(res.app.locals.Categories);
     res.locals.msg = res.app.locals.msg;
     console.log(res.locals.msg)
@@ -107,14 +107,14 @@ router.post('/categories', categories.upsertCategories, function (req, res, next
 });
 
 // Delete categories
-router.delete('/categories/:id', categories.deleteCategoriesById, function (req, res, next) {
+router.delete('/categories/:id', auth.checkAutinticated, auth.checkRoleAdmin, categories.deleteCategoriesById, function (req, res, next) {
     console.log(res.app.locals.Categories);
     res.redirect(301, '/admin/categories');
 });
 
 
 /* GET products page. */
-router.get('/products',  categories.getCategories, products.getProducts,  function (req, res, next) {
+router.get('/products', auth.checkAutinticated, auth.checkRoleAdmin,  categories.getCategories, products.getProducts,  function (req, res, next) {
     let Products = res.app.locals.Products
     let Categories = res.app.locals.Categories
     let msg = res.app.locals.msg
@@ -125,7 +125,7 @@ router.get('/products',  categories.getCategories, products.getProducts,  functi
 });
 
 // Create product
-router.post('/products',  products.upsertProducts, products.uploadFIle, async function (req, res, next) {
+router.post('/products', auth.checkAutinticated, auth.checkRoleAdmin,  products.upsertProducts, products.uploadFIle, async function (req, res, next) {
     console.log(res.app.locals.Products);
     res.locals.msg = res.app.locals.msg;
     console.log(res.locals.msg)
@@ -133,7 +133,7 @@ router.post('/products',  products.upsertProducts, products.uploadFIle, async fu
 });
 
 // Delete products
-router.delete('/products/:id', products.deleteProductsById, function (req, res, next) {
+router.delete('/products/:id', auth.checkAutinticated, auth.checkRoleAdmin, products.deleteProductsById, function (req, res, next) {
     res.redirect(301, '/admin/products');
 });
 

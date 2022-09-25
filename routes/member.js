@@ -5,9 +5,10 @@ const Products = require("../Controller/productController.js")
 const Cart = require("../Controller/cartController.js")
 const Transactions = require("../Controller/transactionController.js") 
 const DetailTransaction = require("../Controller/detailTransactionController.js")
+const auth = require("../Helpers/authentication.js")
 
 /* GET shop page.*/
-router.get('/:id',users.getMemberbyID, Products.getProducts, function (req, res, next) {
+router.get('/:id',auth.checkAutinticated,auth.checkRoleMember,users.getMemberbyID, Products.getProducts, function (req, res, next) {
     let Products = res.app.locals.Products 
     let Members = res.app.locals.Members
     console.log(Members)
@@ -15,7 +16,7 @@ router.get('/:id',users.getMemberbyID, Products.getProducts, function (req, res,
 });
 
 /* GET cart page.*/
-router.get('/cart/:id',users.getMemberbyID, Cart.getCart, function (req, res, next) {
+router.get('/cart/:id',auth.checkAutinticated,auth.checkRoleMember,users.getMemberbyID, Cart.getCart, function (req, res, next) {
     let Members = res.app.locals.Members
     let Cart = res.app.locals.Cart 
     let msg = res.app.locals.msg
@@ -27,19 +28,19 @@ router.get('/cart/:id',users.getMemberbyID, Cart.getCart, function (req, res, ne
 });
 
 // insert cart
-router.post('/cart/:id', Cart.upsertCartbyProduct, function (req, res, next) {
+router.post('/cart/:id',auth.checkAutinticated,auth.checkRoleMember, Cart.upsertCartbyProduct, function (req, res, next) {
     res.locals.msg = res.app.locals.msg;
     res.redirect(301, '/member/'+req.params.id);
 });
 
 // Delete cart
-router.delete('/delete_cart/:id', Cart.deleteCartById, function (req, res, next) {
+router.delete('/delete_cart/:id',auth.checkAutinticated,auth.checkRoleMember, Cart.deleteCartById, function (req, res, next) {
     res.locals.msg = res.app.locals.msg;
     res.redirect(301, '/member/cart/'+req.body.id_user);
 });
 
 // insert Transactions
-router.post('/payment/:id', Transactions.upsertTransactions, Cart.deleteCartByUser, Transactions.uploadFIle, function (req, res, next) {
+router.post('/payment/:id',auth.checkAutinticated,auth.checkRoleMember, Transactions.upsertTransactions, Cart.deleteCartByUser, Transactions.uploadFIle, function (req, res, next) {
     res.locals.msg = res.app.locals.msg;
     
     res.redirect(301, '/member/cart/'+req.params.id);
@@ -47,7 +48,7 @@ router.post('/payment/:id', Transactions.upsertTransactions, Cart.deleteCartByUs
 
 
 /* GET transaction page. */
-router.get('/history/:id', DetailTransaction.getDetailTransactionsUser, Transactions.getTransactions, function (req, res, next) {
+router.get('/history/:id',auth.checkAutinticated,auth.checkRoleMember, DetailTransaction.getDetailTransactionsUser, Transactions.getTransactions, function (req, res, next) {
     let detailTransaction = res.app.locals.DetailTransactions
     let msg = res.app.locals.msg
     console.log(detailTransaction)
