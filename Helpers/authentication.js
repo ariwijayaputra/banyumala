@@ -11,7 +11,10 @@ function checkAutinticated(req, res, next){
 }
 function checkRoleMember( req, res, next){
     if(req.user.id_role == 3){
-        return next()
+        if(req.params.id == req.user.id_user){
+            return next()
+        }
+        return res.redirect(301,'/member/'+String(req.user.id_user))
     }
     else if(req.user.id_role == 2){
         return res.redirect(301,'/bumdes/')
@@ -31,6 +34,7 @@ function checkRoleAdmin( req, res, next){
         return res.redirect(301,'/bumdes/')
     }
     else if(req.user.id_role == 3){
+        console.log("not admin")
         return res.redirect(301,'/member/'+String(req.user.id_user))
     }
 }

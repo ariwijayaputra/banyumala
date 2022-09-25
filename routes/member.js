@@ -11,8 +11,9 @@ const auth = require("../Helpers/authentication.js")
 router.get('/:id',auth.checkAutinticated,auth.checkRoleMember,users.getMemberbyID, Products.getProducts, function (req, res, next) {
     let Products = res.app.locals.Products 
     let Members = res.app.locals.Members
+    let user = req.user
     console.log(Members)
-    res.render('member/member', { title: 'Shop', layout: './member/layout.ejs', Products, Members });
+    res.render('member/member', { title: 'Shop', layout: './member/layout.ejs', Products, Members,user });
 });
 
 /* GET cart page.*/
@@ -20,8 +21,10 @@ router.get('/cart/:id',auth.checkAutinticated,auth.checkRoleMember,users.getMemb
     let Members = res.app.locals.Members
     let Cart = res.app.locals.Cart 
     let msg = res.app.locals.msg
+    let user = req.user
     console.log(msg);
-    res.render('member/cart', { title: 'Shopping Cart', layout: './member/layout.ejs', Cart, Members,msg },(err,html)=>{
+    console.log("route exist")
+    res.render('member/cart', { title: 'Shopping Cart', layout: './member/layout.ejs', Cart, Members,msg,user },(err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
     });
@@ -51,8 +54,10 @@ router.post('/payment/:id',auth.checkAutinticated,auth.checkRoleMember, Transact
 router.get('/history/:id',auth.checkAutinticated,auth.checkRoleMember, DetailTransaction.getDetailTransactionsUser, Transactions.getTransactions, function (req, res, next) {
     let detailTransaction = res.app.locals.DetailTransactions
     let msg = res.app.locals.msg
+    let user = req.user
     console.log(detailTransaction)
-    res.render('member/orderHistory', { title: 'Order History', layout: './member/layout.ejs', Transactions, detailTransaction,msg }, (err,html)=>{
+    console.log("going to order")
+    res.render('member/orderHistory', { title: 'Order History', layout: './member/layout.ejs', Transactions, detailTransaction,msg, user }, (err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
     });

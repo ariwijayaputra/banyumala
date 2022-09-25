@@ -8,7 +8,7 @@
     </title>
     <%- include('./head') %>
 </head>
-
+<% console.log(user) %> 
 <body class="hold-transition sidebar-mini  ">
     <!-- Site wrapper -->
     <div class="wrapper">
@@ -21,7 +21,7 @@
                             class="fas fa-bars text-dark"></i></a>
                 </li>
             </ul>
-            <a href="/member/1"
+            <a href="/member/<%=user.id_user  %> "
                 class="d-flex brand-link p-0 align-items-center my-auto mx-auto text-light text-decoration-none">
                 <img src="/images/brand.png" alt="Logo" class="brand-image img-circle" style="opacity: .8">
                 <span class=" font-weight-bold text-dark" style="font-family: 'Dancing Script';">Banyumala
@@ -42,7 +42,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-1 rounded-right ">
             <!-- Brand Logo -->
-            <a href="/member/1" class="brand-link">
+            <a href="/member/<%=user.id_user  %>" class="brand-link">
                 <% if (Members.photo) { %>
                     <img src="/admin/img/<%= Members.photo %>" alt="Profile" style="max-width: 32px; min-height:32px" class="brand-image img-circle">
                 <% } else { %>
@@ -59,12 +59,12 @@
                     <ul class="nav  nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
                             <% if (title=='Shop' ) { %>
-                                <a href="/member/1" class="nav-link text-white">
+                                <a href="/member/<%=user.id_user  %>" class="nav-link text-white">
                                     <i class="nav-icon fa-solid fa-shop"></i>
                                     <p>Shop</p>
                                 </a>
                                 <% } else { %>
-                                    <a href="/member/1" class="nav-link ">
+                                    <a href="/member/<%=user.id_user  %>" class="nav-link ">
                                         <i class="nav-icon fa-solid fa-shop"></i>
                                         <p>Shop</p>
                                     </a>
@@ -72,13 +72,13 @@
                         </li>
                         <li class="nav-item">
                             <% if (title=='Shopping Cart' ) { %>
-                                <a href="/member/cart/1" class="nav-link text-white">
+                                <a href="/member/cart/<%=user.id_user  %>" class="nav-link text-white">
                                     <i class="nav-icon fa-solid fa-cart-shopping"></i>
                                     <p>Cart</p>
                                     
                                 </a>
                                 <% } else { %>
-                                    <a href="/member/cart/1" class="nav-link">
+                                    <a href="/member/cart/<%=user.id_user  %>" class="nav-link">
                                         <i class="nav-icon fa-solid fa-cart-shopping"></i>
                                         <p>Cart</p>
                                     </a>
@@ -87,12 +87,12 @@
                         </li>
                         <li class="nav-item">
                             <% if (title=='Order History' ) { %>
-                                <a href="/member/history/1" class="nav-link text-white">
+                                <a href="/member/history/<%=user.id_user  %>" class="nav-link text-white">
                                     <i class="nav-icon fa-solid fa-clock-rotate-left"></i>
                                     <p>History</p>
                                 </a>
                                 <% } else { %>
-                                    <a href="/member/history/1" class="nav-link">
+                                    <a href="/member/history/<%=user.id_user  %>" class="nav-link">
                                         <i class="nav-icon fa-solid fa-clock-rotate-left"></i>
                                         <p>History</p>
                                     </a>

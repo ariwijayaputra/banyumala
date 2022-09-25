@@ -56,74 +56,77 @@
                             </thead>
                             <tbody>
                                 <% //Tampilkan semua data dari tabel  %>
-                                <% let number = 1 ;  let date %> 
-                                <% detailTransaction.forEach(transaction => { %>
-                                  <% 
-                                    date = new Date(transaction.createdAt);
-                                    date = date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear()
-                                  %> 
-                                  <tr>
-                                      <td scope="row" class="align-middle"><%= number %></td>
-                                      
-                                      <td class="align-middle"><%=date %></td>
-                                      <td class="align-middle"><%=transaction.total %></td>
-                                      <td class="align-middle">Bank Trf</td>
-                                      <td class="align-middle">
-                                        <button type="submit" name="" id="" class="btn btn-primary btn-sm px-3 mx-1" data-toggle="modal"
-                                        data-target="#photo<%= transaction.id_transaction %>">
-                                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
-                                        </button> 
-                                      </td>
-                                      <td class="align-middle">
-                                        <button class="btn">
-                                            <% if (transaction.status == "Success") { %>
-                                                <span class="badge badge-success text-md align-middle">success</span>
-                                            <% } else if (transaction.status == 'Pending') { %>
-                                                <span class="badge badge-warning text-md align-middle">Pending</span>
-                                            <% } else { %>
-                                                <span class="badge badge-danger text-md align-middle">Canceled</span>
-                                            <% } %>
-                                        </button>
-                                      </td>
-                                      <td class="align-middle">
-                                        <button type="submit" name="" id="" class="btn btn-primary btn-sm px-3 mx-1" data-toggle="modal"
-                                          data-target="#detail<%= transaction.id_transaction %>">
-                                              <i class="fa-solid fa-eye" aria-hidden="true"></i>
-                                          </button>  
-                                      </td>
-                                      
-                                  </tr>
-                                  <!-- Modal Photo -->
-                                <div class="modal fade" id="photo<%= transaction.id_transaction%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Transfer Receipt </h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body d-flex justify-content-center flex-sm-row flex-column">
-                                                
-                                                <% if (transaction.payment ){ %>
-                                                    <img class="rounded-lg img-responsive overflow-hidden" src="/admin/img/<%= transaction.payment %> "  width="450px" alt="">
-                                                <% } else { %>
-                                                    <img class="rounded-lg img-responsive overflow-hidden w-75 m-sm-3 mx-auto my-3" src="/images/sad.svg" alt="">
-                                                    <h3 class="my-auto mx-3 text-secondary text-center text-sm-left">Sorry, There is no receipt of this transaction in our data</h3>
-                                                <% } %>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <form action="/admin/transactions" method="POST">
-                                                    <input type="hidden" name="id_transaction" value="<%= transaction.id_transaction %>" >
-                                                    <button type="submit" name="status" class="btn btn-danger" value="Refused">Refuse</button>
-                                                    <button type="submit" name="status" class="btn btn-success" value="Success">Confirm Payment</button>
-                                                    <button type="submit" name="status" class="btn btn-dark" data-dismiss="modal">Close</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% number++ }) %>  
+                                <% let number = 1 ;  let date %>
+                                <% if (!detailTransaction.error) { %>
+                                    <% detailTransaction.forEach(transaction => { %>
+                                        <% 
+                                          date = new Date(transaction.createdAt);
+                                          date = date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear()
+                                        %> 
+                                        <tr>
+                                            <td scope="row" class="align-middle"><%= number %></td>
+                                            
+                                            <td class="align-middle"><%=date %></td>
+                                            <td class="align-middle"><%=transaction.total %></td>
+                                            <td class="align-middle">Bank Trf</td>
+                                            <td class="align-middle">
+                                              <button type="submit" name="" id="" class="btn btn-primary btn-sm px-3 mx-1" data-toggle="modal"
+                                              data-target="#photo<%= transaction.id_transaction %>">
+                                                  <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                              </button> 
+                                            </td>
+                                            <td class="align-middle">
+                                              <button class="btn">
+                                                  <% if (transaction.status == "Success") { %>
+                                                      <span class="badge badge-success text-md align-middle">success</span>
+                                                  <% } else if (transaction.status == 'Pending') { %>
+                                                      <span class="badge badge-warning text-md align-middle">Pending</span>
+                                                  <% } else { %>
+                                                      <span class="badge badge-danger text-md align-middle">Canceled</span>
+                                                  <% } %>
+                                              </button>
+                                            </td>
+                                            <td class="align-middle">
+                                              <button type="submit" name="" id="" class="btn btn-primary btn-sm px-3 mx-1" data-toggle="modal"
+                                                data-target="#detail<%= transaction.id_transaction %>">
+                                                    <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                                </button>  
+                                            </td>
+                                            
+                                        </tr>
+                                        <!-- Modal Photo -->
+                                      <div class="modal fade" id="photo<%= transaction.id_transaction%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                              <div class="modal-content">
+                                                  <div class="modal-header">
+                                                      <h5 class="modal-title" id="exampleModalLabel">Transfer Receipt </h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                  </div>
+                                                  <div class="modal-body d-flex justify-content-center flex-sm-row flex-column">
+                                                      
+                                                      <% if (transaction.payment ){ %>
+                                                          <img class="rounded-lg img-responsive overflow-hidden" src="/admin/img/<%= transaction.payment %> "  width="450px" alt="">
+                                                      <% } else { %>
+                                                          <img class="rounded-lg img-responsive overflow-hidden w-75 m-sm-3 mx-auto my-3" src="/images/sad.svg" alt="">
+                                                          <h3 class="my-auto mx-3 text-secondary text-center text-sm-left">Sorry, There is no receipt of this transaction in our data</h3>
+                                                      <% } %>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                      <form action="/admin/transactions" method="POST">
+                                                          <input type="hidden" name="id_transaction" value="<%= transaction.id_transaction %>" >
+                                                          <button type="submit" name="status" class="btn btn-danger" value="Refused">Refuse</button>
+                                                          <button type="submit" name="status" class="btn btn-success" value="Success">Confirm Payment</button>
+                                                          <button type="submit" name="status" class="btn btn-dark" data-dismiss="modal">Close</button>
+                                                      </form>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <% number++ }) %>  
+                                <% } %> 
+                                
                             </tbody>
                         </table>
                     </div>
