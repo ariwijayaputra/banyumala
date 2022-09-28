@@ -80,7 +80,7 @@
                 <% detailTransaction.forEach(transaction => { %>
                   <% totalTransactions+=transaction.total %> 
                 <% }) %>
-                <%= totalTransactions  %> 
+                <%= numberToCurrency(totalTransactions)  %> 
               <% } else { %>
                 <span>0</span>  
               <% } %>

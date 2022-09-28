@@ -1,4 +1,4 @@
-
+<script src="/javascripts/numberToCurrency.js"></script>
 <div class="d-flex align-items-stretch m-3">
     <div class=" w-100 text-left p-3">
         <% if (msg) { %>
@@ -112,7 +112,8 @@
                 </div>
                 <div class="col-4">
                     <p id="totalItems"><%= totalItems %></p>
-                    <p id="totalPrice"><%= totalPrice %></p>
+                    <p hidden id="totalPrice"><%= totalPrice %></p>
+                    <p id="totalPriceText">Rp. <%= numberToCurrency(totalPrice) %></p>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary" data-toggle="modal"
@@ -136,8 +137,8 @@
                             <div class="modal-body">
                                 <table class="table p-5">
                                     <tr>
-                                        <th class="col">Product</th>
-                                        <th>Price</th>
+                                        <th style="min-width: 120px;">Product</th>
+                                        <th style="min-width: 80px;">Price</th>
                                         <th>Qty</th>
                                         <th>Subtotal</th>
                                     </tr>
@@ -145,18 +146,17 @@
                                     <% userCart.carts.forEach(cart => { %>
                                         <tr>
                                             <td><%= cart.product.name %> </td>
-                                            <td id="checkPrice<%= cart.id_cart %>"><%= cart.product.price %></td>
+                                            <td id="checkPrice<%= cart.id_cart %>">Rp. <%= cart.product.price %></td>
                                             <td id="checkQty<%= cart.id_cart %>"><%= cart.amount %></td>
-                                            <td id="subTotal<%= cart.id_cart %>"><%=( cart.amount * cart.product.price) %></td>
+                                            <td id="subTotal<%= cart.id_cart %>">Rp. <%=( cart.amount * cart.product.price) %></td>
                                         </tr>
                                     <% }) %>
-                                    
-
+                    
                                 </table>
                                 <ul class="list-group my-3">
                                     <li class="list-group-item active d-flex justify-content-between">
                                         <div>Total</div>
-                                        <div id="grandTotal"><script>$('#grandTotal').text($('#totalPrice').text())</script></div>
+                                        <div id="grandTotal"><script>$('#grandTotal').text('Rp '+$('#totalPrice').text())</script></div>
                                     </li>
                                 </ul>
                                 <p>please transfer to account: <strong>BCA 1233457</strong>
@@ -217,17 +217,20 @@
         $('#productAmount').val(JSON.stringify(detailTransaction))
     })
 </script>
-
 <script>
     let detailTransaction = {}
+    
     function updateTotal(price, qty){
         let totalPrice = Number($('#totalPrice').text())
         let totalItems = Number($('#totalItems').text())
         totalItems += qty
         totalPrice += price
-        $('#totalItems').text(totalItems)
+        $('#totalItems').text(totalItems) 
         $('#totalPrice').text(totalPrice)
-        $('#grandTotal').text($('#totalPrice').text())
+        totalPrice = numberToCurrency(totalPrice)
+        $('#totalPriceText').text("Rp. "+totalPrice)
+        console.log(totalPrice)
+        $('#grandTotal').text("Rp. "+totalPrice)
         $('#total').val($('#totalPrice').text())
         console.log($('#total').val())
     }
@@ -237,7 +240,7 @@
         qty++
         updateTotal(price, +1)
         $('#checkQty'+id).text(qty)
-        $('#subTotal'+id).text((qty*price))
+        $('#subTotal'+id).text("Rp. "+numberToCurrency(qty*price))
         $('#quantity'+id).val(qty)
         detailTransaction[id_product] = qty
         $('#productAmount').val(JSON.stringify(detailTransaction))
@@ -250,7 +253,7 @@
             updateTotal(-price, -1)
         }
         $('#checkQty'+id).text(qty)
-        $('#subTotal'+id).text((qty*price))
+        $('#subTotal'+id).text("Rp. "+numberToCurrency(qty*price))
         $('#quantity'+id).val(qty)
         detailTransaction[id_product] = qty
         $('#productAmount').val(JSON.stringify(detailTransaction))

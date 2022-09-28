@@ -7,6 +7,8 @@ const transactions = require('../Controller/transactionController.js')
 const detailTransaction = require('../Controller/detailTransactionController.js');
 const path = require("path");
 const auth = require("../Helpers/authentication.js")
+const { numberToCurrency } = require('../Helpers/numberToCurrency.js');
+
 
 
 /* GET home page. */
@@ -39,7 +41,7 @@ router.get('/', auth.checkAutinticated, auth.checkRoleAdmin, categories.getCateg
     console.log(detailTransaction)
     
     ProductSold = JSON.stringify(ProductSold);
-    res.render('admin/dashboard', { title: 'Dashboard', layout:'./admin/layout.ejs', Categories, ProductSold, detailTransaction, Members});
+    res.render('admin/dashboard', { title: 'Dashboard', layout:'./admin/layout.ejs', Categories, ProductSold, detailTransaction, Members, numberToCurrency});
 });
 
 
@@ -48,7 +50,7 @@ router.get('/members', auth.checkAutinticated, auth.checkRoleAdmin, users.getMem
     let Members = res.app.locals.Members
     let msg = res.app.locals.msg
     console.log(Members)
-    res.render('admin/members', { title: 'Members', layout: './admin/layout.ejs', Members, msg },(err,html)=>{
+    res.render('admin/members', { title: 'Members', layout: './admin/layout.ejs', Members, msg, numberToCurrency },(err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
     });
@@ -71,7 +73,7 @@ router.get('/transactions', auth.checkAutinticated, auth.checkRoleAdmin, detailT
     let Transactions = res.app.locals.Transactions
     let detailTransaction = res.app.locals.DetailTransactions
     let msg = res.app.locals.msg
-    res.render('admin/transactions', { title: 'Transactions', layout: './admin/layout.ejs', Transactions, detailTransaction,msg }, (err,html)=>{
+    res.render('admin/transactions', { title: 'Transactions', layout: './admin/layout.ejs', Transactions, detailTransaction,msg, numberToCurrency }, (err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
     });
@@ -92,7 +94,7 @@ router.post('/transactions', transactions.updateTransaction, async function (req
 router.get('/categories', auth.checkAutinticated, auth.checkRoleAdmin, categories.getCategories, function (req, res, next) {
     let Categories = res.app.locals.Categories
     let msg = res.app.locals.msg
-    res.render('admin/categories', { title: 'Categories', layout: './admin/layout.ejs', Categories, msg }, (err,html)=>{
+    res.render('admin/categories', { title: 'Categories', layout: './admin/layout.ejs', Categories, msg, numberToCurrency }, (err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
     });
@@ -118,7 +120,7 @@ router.get('/products', auth.checkAutinticated, auth.checkRoleAdmin,  categories
     let Products = res.app.locals.Products
     let Categories = res.app.locals.Categories
     let msg = res.app.locals.msg
-    res.render('admin/products', { title: 'Products', layout: './admin/layout.ejs', Products, Categories, msg },(err,html)=>{
+    res.render('admin/products', { title: 'Products', layout: './admin/layout.ejs', Products, Categories, msg, numberToCurrency },(err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
     });

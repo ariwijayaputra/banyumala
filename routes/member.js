@@ -5,7 +5,8 @@ const Products = require("../Controller/productController.js")
 const Cart = require("../Controller/cartController.js")
 const Transactions = require("../Controller/transactionController.js") 
 const DetailTransaction = require("../Controller/detailTransactionController.js")
-const auth = require("../Helpers/authentication.js")
+const auth = require("../Helpers/authentication.js");
+const { numberToCurrency } = require('../Helpers/numberToCurrency.js');
 
 /* GET shop page.*/
 router.get('/:id',auth.checkAutinticated,auth.checkRoleMember,users.getMemberbyID, Products.getProducts, function (req, res, next) {
@@ -13,7 +14,7 @@ router.get('/:id',auth.checkAutinticated,auth.checkRoleMember,users.getMemberbyI
     let Members = res.app.locals.Members
     let user = req.user
     console.log(Members)
-    res.render('member/member', { title: 'Shop', layout: './member/layout.ejs', Products, Members,user });
+    res.render('member/member', { title: 'Shop', layout: './member/layout.ejs', Products, Members,user, numberToCurrency });
 });
 
 /* GET cart page.*/
@@ -24,7 +25,7 @@ router.get('/cart/:id',auth.checkAutinticated,auth.checkRoleMember,users.getMemb
     let user = req.user
     console.log(msg);
     console.log("route exist")
-    res.render('member/cart', { title: 'Shopping Cart', layout: './member/layout.ejs', Cart, Members,msg,user },(err,html)=>{
+    res.render('member/cart', { title: 'Shopping Cart', layout: './member/layout.ejs', Cart, Members,msg,user, numberToCurrency },(err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
     });
@@ -57,7 +58,7 @@ router.get('/history/:id',auth.checkAutinticated,auth.checkRoleMember, DetailTra
     let user = req.user
     console.log(detailTransaction)
     console.log("going to order")
-    res.render('member/orderHistory', { title: 'Order History', layout: './member/layout.ejs', Transactions, detailTransaction,msg, user }, (err,html)=>{
+    res.render('member/orderHistory', { title: 'Order History', layout: './member/layout.ejs', Transactions, detailTransaction,msg, user, numberToCurrency }, (err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
     });
