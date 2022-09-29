@@ -13,7 +13,7 @@
                 <h5 class=" my-auto mr-auto">Data Transactions</h5>
                 <div class="card-tools my-auto">
                     <!-- This will cause the card to collapse when clicked -->
-                    <a type="button" class="btn btn-tool" href="/admin/transactions" id="reload"><i class="fa-solid fa-arrow-rotate-right"></i></a>
+                    <a type="button" class="btn btn-tool" href="/admin/transactions?month=all" id="reload"><i class="fa-solid fa-arrow-rotate-right"></i></a>
                     <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
                             class="fas fa-minus"></i></button>
                 </div>
@@ -23,14 +23,21 @@
                 <div class="d-flex mb-3 justify-content-between">              
                     <!--Search-->
                     <form class="form-inline">
-                        <div class="input-group" >
+                        <div class="input-group " >
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">
+                                <span class="input-group-text border" id="basic-addon1">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </span>
                             </div>
-                            <input type="text" class="form-control" placeholder="Search"
+                            <input type="text" class="form-control border" placeholder="Search"
                                 aria-label="Recipient's username" aria-describedby="button-addon2" id="mysearch">
+                            <span class="input-group-text border rounded-0" >
+                                    <i class="fa-solid fa-filter"></i>
+                                    <span class="d-none d-sm-inline ml-sm-2">Month</span>
+                            </span>
+                            <input type="month" class="border border-left-0 rounded-right text-secondary" id="selectMonth" 
+                            name="month" onfocus="this.showPicker()" onchange="submit()" placeholder="Month Year" value=<%= month %> >
+
                         </div>
                     </form>
                 </div>
@@ -57,6 +64,7 @@
                             <tbody>
                                 <% //Tampilkan semua data dari tabel  %>
                                 <% let number = 1 ;  let date %> 
+                                <% console.log(Transactions) %> 
                                 <% Transactions.forEach(transaction => { %>
                                   <% 
                                     date = new Date(transaction.createdAt);

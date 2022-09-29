@@ -9,6 +9,7 @@ module.exports = function errHandler(err){
         return error;
     }
     if (err.name == "SequelizeDatabaseError") {
+        console.log(err)
         return  { error: "ada kesalahan pada request field" };
     }
 
