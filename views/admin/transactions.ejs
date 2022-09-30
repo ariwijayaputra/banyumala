@@ -185,19 +185,23 @@
                     <% let startDate %> 
                     <% let day %> 
                     <% transaction.detail_transactions.forEach(detail => { %>
+                        <% console.log(detail) %> 
                      <% if (transaction.id_transaction == detail.id_transaction) { %>
                         <tr>
                             <% startDate = new Date(detail.start_date) %> 
                             <% endDate = new Date(detail.end_date) %> 
                             <% day = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24) +1 %> 
-                            <td scope="row"><%= i %> </td>
-                            <td><%= detail.product.name %> </td>
-                            <td><%= detail.start_date %> </td>
-                            <td><%= detail.end_date%> </td>
-                            <td><%= day %> </td>
-                            <td><%= detail.amount %></td>
-                            <td>Rp. <%= numberToCurrency(detail.product.price) %></td>
-                            <td>Rp. <%= numberToCurrency(detail.product.price * detail.amount *day) %></td>
+                            <% if (detail.product!=null) { %>
+                                <td scope="row"><%= i %> </td>
+                                <td><%= detail.product.name %> </td>
+                                <td><%= detail.start_date %> </td>
+                                <td><%= detail.end_date%> </td>
+                                <td><%= day %> </td>
+                                <td><%= detail.amount %></td>
+                                <td>Rp. <%= numberToCurrency(detail.product.price) %></td>
+                                <td>Rp. <%= numberToCurrency(detail.product.price * detail.amount *day) %></td>
+                            <% } %>
+                            
                           </tr>
                         <% i++ %> 
                         
