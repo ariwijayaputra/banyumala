@@ -8,11 +8,15 @@ const User = require("../Models/UserModel.js")
 const upsertCartbyProduct = async (req, res, next) => {
     try {
         req.body.id_user = req.params.id
+        console.log(req.body)
         let result
         let isExist = await Cart.findOne({ where: { id_product: req.body.id_product, id_user: req.body.id_user } })
         if (isExist) {
             existingData = JSON.parse(JSON.stringify(isExist))
             existingData.amount += Number(req.body.amount)
+            existingData.start_date = req.body.start_date
+            existingData.end_date = req.body.end_date
+            console.log(existingData);
             result = await Cart.update(existingData, { where: { id_product: req.body.id_product, id_user: req.body.id_user } });
         } else {
             console.log("isnert")

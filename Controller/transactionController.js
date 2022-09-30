@@ -13,15 +13,21 @@ const upsertTransactions = async (req, res, next) => {
 		res.app.locals.Transactions = result;
 		console.log("==================================")
 		let productAmount = JSON.parse(req.body.productAmount)
+		let start_date = JSON.parse(req.body.start_date)
+		let end_date = JSON.parse(req.body.end_date)
 		let productArray = []
 		let idProduct = Object.keys(productAmount)
 		let amount = Object.values(productAmount)
+		start_date = Object.values(start_date)
+		end_date = Object.values(end_date)
 		console.log(productAmount)
 		for (let index = 0; index < Object.keys(productAmount).length; index++) {
 			productArray.push({
 				"id_transaction": res.app.locals.Transactions.id_transaction,
 				"id_product": idProduct[index],
-				"amount": amount[index]
+				"amount": amount[index],
+				"start_date": start_date[index],
+				"end_date" : end_date[index]
 			})
 		}
 		console.log(productArray)

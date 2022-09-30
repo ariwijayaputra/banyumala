@@ -1,4 +1,19 @@
 <script src="/javascripts/numberToCurrency.js"></script>
+<script>
+    function updateBookingDay(id){
+        const startDate = new Date($("#start_date"+id).val())
+        const x = document.getElementById("end_date"+id).min = $("#start_date"+id).val()
+        const endDate = new Date($("#end_date"+id).val())
+        if(!isNaN(startDate) && !isNaN(endDate) ){
+            day = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24) +1
+            $('#days'+id).text(day) 
+            let value = $("#quantity"+id).val()
+            let price = $("#price"+id).text()
+            totalPrice = value * price * day
+            $('#subTotal'+id).text(numberToCurrency(totalPrice))
+        }
+    }
+</script>
 <div class="d-flex align-items-stretch m-3">
     <div class=" w-100 text-left p-3">
         <% if (msg) { %>
@@ -20,25 +35,34 @@
                                 <th scope="col" style="min-height: 96px;">Photo</th>
                                 <th scope="col" style="min-width: 144px;" class="col">Product Name</th>
                                 <th scope="col" style="min-width: 104px;">Price</th>
-                                <th scope="col" style="min-width: 200px;" class="col">Quantity</th>
-                                <th scope="col" style="min-width: 144px;">Action</th>
+                                <th scope="col" style="min-width: 180px;" class="col">Quantity</th>
+                                <th scope="col" style="min-width: 130px;" class="col">Booking Start</th>
+                                <th scope="col" style="min-width: 130px;" class="col">Booking End</th>
+                                <th scope="col" style="min-width: 60px;">Days</th>
+                                <th scope="col" style="min-width: 80px;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <% let totalItems = 0 %>
                             <% let totalPrice = 0 %> 
+                            <% let endDate %>
+                            <% let startDate %>  
                             <% if (!Cart.error) { %>
                                 <% Cart.forEach(userCart => { %>
                                     
                                     <% userCart.carts.forEach(cart => { %>
                                         <% totalItems += cart.amount %> 
-                                        <% totalPrice += (cart.product.price*cart.amount) %>
+                                        <% startDate = new Date(cart.start_date) %> 
+                                        <% endDate = new Date(cart.end_date) %> 
+                                        <% day = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24) +1 %> 
+                                        <% totalPrice += (cart.product.price*cart.amount*day) %>
                                         <tr>
                                             <td scope="row" class="align-middle">
                                                 <img src="/admin/img/<%= cart.product.photo %>" style="max-width: 96px;" alt="">
                                             </td>
                                             <td class="align-middle"><%= cart.product.name %> </td>
-                                            <td class="align-middle" id="price<%= cart.id_cart %>"><%= cart.product.price %></td>
+                                            <p id="price<%= cart.id_cart %>" hidden><%= cart.product.price %> </p>
+                                            <td class="align-middle"><%= numberToCurrency(cart.product.price) %></td>
                                             <td class="align-middle">
                                                 <div class="input-group w-sm-25 mx-auto">
                                                     <div class="input-group-prepend">
@@ -59,6 +83,15 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="align-middle">
+                                                <input type="date" name="start_date" id="start_date<%= cart.id_cart %>"  class="form-control" onchange="updateBookingDay(<%= cart.id_cart %>,<%= cart.id_product %>)" value="<%= cart.start_date %>">
+                                                <script>document.getElementById("start_date"+<%= cart.id_cart %>).min = new Date().toISOString().split("T")[0]</script>
+                                            </td>
+                                            <td class="align-middle">
+                                                <input type="date" name="end_date" id="end_date<%= cart.id_cart %>" class="form-control" onchange="updateBookingDay(<%= cart.id_cart %>,<%= cart.id_product %>)" value="<%= cart.end_date %>">
+                                                <script>document.getElementById("end_date"+<%= cart.id_cart %>).min = new Date().toISOString().split("T")[0]</script>
+                                            </td>
+                                            <td class="align-middle" id="day<%= cart.id_cart %>"><%= day %> </td>
                                             <td class="align-middle">
                                                 <button type="submit" name="" id="" class="btn btn-danger btn-sm px-3 mx-1"
                                                     data-toggle="modal" data-target="#delete<%= cart.id_cart %>">
@@ -140,15 +173,18 @@
                                         <th style="min-width: 120px;">Product</th>
                                         <th style="min-width: 80px;">Price</th>
                                         <th>Qty</th>
+                                        <th>Days</th>
                                         <th>Subtotal</th>
                                     </tr>
                                     
                                     <% userCart.carts.forEach(cart => { %>
                                         <tr>
                                             <td><%= cart.product.name %> </td>
-                                            <td id="checkPrice<%= cart.id_cart %>">Rp. <%= cart.product.price %></td>
-                                            <td id="checkQty<%= cart.id_cart %>"><%= cart.amount %></td>
-                                            <td id="subTotal<%= cart.id_cart %>">Rp. <%=( cart.amount * cart.product.price) %></td>
+                                            <td id="checkPrice<%= cart.id_cart %>">Rp. <%= numberToCurrency(cart.product.price) %></td>
+                                            <td id="checkQty<%= cart.id_cart %>"><%= cart.amount %></td> 
+                                            <td><span id="days<%= cart.id_cart %>"></span></td>
+                                            <td>Rp. <span id="subTotal<%= cart.id_cart %>"><%=numberToCurrency( cart.amount * cart.product.price) %></span></td>
+                                            <script>updateBookingDay(<%= cart.id_cart %> )</script>
                                         </tr>
                                     <% }) %>
                     
@@ -156,7 +192,7 @@
                                 <ul class="list-group my-3">
                                     <li class="list-group-item active d-flex justify-content-between">
                                         <div>Total</div>
-                                        <div id="grandTotal"><script>$('#grandTotal').text('Rp '+$('#totalPrice').text())</script></div>
+                                        <div id="grandTotal"><script>$('#grandTotal').text('Rp '+numberToCurrency($('#totalPrice').text()))</script></div>
                                     </li>
                                 </ul>
                                 <p>please transfer to account: <strong>BCA 1233457</strong>
@@ -170,6 +206,8 @@
                                     <input type="file" name="payment" required class="custom-file-input" id="inputGroupFile02" required>
                                     <label class="custom-file-label" for="inputGroupFile02">Transfer Receipt</label>
                                     </div>
+                                    <input type="hidden" name="start_date" id="start_date">
+                                    <input type="hidden" name="end_date" id="end_date">
                                     <input type="hidden" name="id_user" id="id_user" value="<%= userCart.id_user %>">
                                     <input type="hidden" name="total" id="total" value="<%= totalPrice %>" >
                                     <input type="hidden" name="status" id="status" value="Pending">
@@ -213,34 +251,73 @@
         
         detailTransaksi.forEach(detail => {
             detailTransaction[detail.id_product] = detail.amount
+            start_date[detail.id_product]=detail.start_date
+            end_date[detail.id_product]=detail.end_date
         })
         $('#productAmount').val(JSON.stringify(detailTransaction))
+        $('#start_date').val(JSON.stringify(start_date))
+        $('#end_date').val(JSON.stringify(end_date))
     })
 </script>
 <script>
     let detailTransaction = {}
-    
-    function updateTotal(price, qty){
-        let totalPrice = Number($('#totalPrice').text())
-        let totalItems = Number($('#totalItems').text())
-        totalItems += qty
-        totalPrice += price
-        $('#totalItems').text(totalItems) 
+    let start_date = {}
+    let end_date = {}
+    let day
+    let totalPrice 
+    function updateBookingDay(id, id_product){
+        const startDate = new Date($("#start_date"+id).val())
+        //const y = document.getElementById("start_date"+id).min = new Date()
+        console.log(new Date())
+        const x = document.getElementById("end_date"+id).min = $("#start_date"+id).val()
+        console.log(x)
+        let endDate = new Date($("#end_date"+id).val())
+        if(!isNaN(startDate) && !isNaN(endDate) ){
+            if(startDate>endDate){
+                endDate = startDate 
+                $("#end_date"+id).val($("#start_date"+id).val())
+            }
+            totalPrice = Number($('#totalPrice').text())
+            let dayBefore = $('#days'+id).text()
+            day = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24) +1
+            $('#days'+id).text(day) 
+            $('#day'+id).text(day) 
+            let updateDay = day - dayBefore
+            let value = $("#quantity"+id).val()
+            let price = $("#price"+id).text()
+            let subTotal = value * price * day
+            $('#subTotal'+id).text(numberToCurrency(value*price*day))
+            totalPrice += (value * price * updateDay)
+            updateTotalText(totalPrice)
+            start_date[id_product] = $("#start_date"+id).val()
+            end_date[id_product] = $("#end_date"+id).val()
+            $('#start_date').val(JSON.stringify(start_date))
+            $('#end_date').val(JSON.stringify(end_date))
+        }
+    }
+    function updateTotalText(totalPrice){
         $('#totalPrice').text(totalPrice)
-        totalPrice = numberToCurrency(totalPrice)
-        $('#totalPriceText').text("Rp. "+totalPrice)
+        $('#totalPriceText').text(totalPrice)
+        $('#total').val(totalPrice)
+        $('#grandTotal').text(totalPrice)
+    }
+    function updateTotal(price, qty, days){
+        totalPrice = Number($('#totalPrice').text())
+        let totalItems = Number($('#totalItems').text())
+        
+        totalItems += qty
+        totalPrice += (price * days )
         console.log(totalPrice)
-        $('#grandTotal').text("Rp. "+totalPrice)
-        $('#total').val($('#totalPrice').text())
-        console.log($('#total').val())
+        updateTotalText(totalPrice)
     }
     function add(id, id_product) {
         let qty = $('#quantity'+id).val()
         let price = Number($('#price'+id).text())
+        let days = Number($('#days'+id).text())
         qty++
-        updateTotal(price, +1)
+        updateTotal(price, +1,days)
         $('#checkQty'+id).text(qty)
-        $('#subTotal'+id).text("Rp. "+numberToCurrency(qty*price))
+        $('#subTotal'+id).text(numberToCurrency(qty*price*days))
         $('#quantity'+id).val(qty)
         detailTransaction[id_product] = qty
         $('#productAmount').val(JSON.stringify(detailTransaction))
@@ -248,12 +325,13 @@
     function substract(id,id_product) {
         let qty = $('#quantity'+id).val()
         let price = Number($('#price'+id).text())
+        let days = Number($('#days'+id).text())
         if (qty > 1) {
             qty--
-            updateTotal(-price, -1)
+            updateTotal(-price, -1, days)
         }
         $('#checkQty'+id).text(qty)
-        $('#subTotal'+id).text("Rp. "+numberToCurrency(qty*price))
+        $('#subTotal'+id).text(numberToCurrency(qty*price*days))
         $('#quantity'+id).val(qty)
         detailTransaction[id_product] = qty
         $('#productAmount').val(JSON.stringify(detailTransaction))

@@ -78,7 +78,9 @@
               <% if (!detailTransaction.error) { %>
                 <% let totalTransactions = 0 %> 
                 <% detailTransaction.forEach(transaction => { %>
-                  <% totalTransactions+=transaction.total %> 
+                  <% if (transaction.status == "Success") { %>
+                    <% totalTransactions+=transaction.total %> 
+                  <% } %>
                 <% }) %>
                 <%= numberToCurrency(totalTransactions)  %> 
               <% } else { %>

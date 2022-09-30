@@ -50,7 +50,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
                                     <a name="" id="" class="btn btn-primary col-3" href="#" role="button"
-                                        data-toggle="modal" data-target="#cart">
+                                        data-toggle="modal" data-target="#cart<%= product.id_product %>">
                                         <i class="fa-solid fa-cart-shopping mx-1"></i>
                                     </a>
                                 </div>
@@ -76,7 +76,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
                                     <a name="" id="" class="btn btn-primary col-3" href="#" role="button"
-                                        data-toggle="modal" data-target="#cart">
+                                        data-toggle="modal" data-target="#cart<%= product.id_product %>">
                                         <i class="fa-solid fa-cart-shopping mx-1"></i>
                                     </a>
                                 </div>
@@ -99,24 +99,44 @@
                                         <h5 class="text-center my-3">Quantity</h5>
                                         <div class="input-group mb-3 w-50 w-sm-25 mx-auto">
                                             <div class="input-group-prepend">
-                                                <button class="btn btn-outline-secondary" onclick="substract()"
+                                                <button class="btn btn-outline-secondary" onclick="substract(<%= product.id_product %>)"
                                                     type="button" id="button-addon1">
                                                     <i class="fa fa-minus" aria-hidden="true"></i>
                                                 </button>
                                             </div>
                                             <input type="hidden" name="id_user" value="<%= Members.id_user %>" >
                                             <input type="hidden" name="id_product" value="<%= product.id_product %>" >
-                                            <input type="text" id="quantity" name="amount"
+                                            <input type="text" id="quantity<%= product.id_product %>" name="amount"
                                                 class="form-control border-secondary text-center bg-white "
                                                 placeholder="0" aria-label="Example text with button addon"
                                                 aria-describedby="button-addon1" value="1">
                                             <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary" onclick="add()" type="button"
+                                                <button class="btn btn-outline-secondary" onclick="add(<%= product.id_product %>)" type="button"
                                                     id="button-addon1">
                                                     <i class="fa fa-plus" aria-hidden="true"></i>
                                                 </button>
                                             </div>
                                         </div>
+                                        <h5 class="my-3 text-center">Booking For: <span id="days<%= product.id_product %>"></span> Days</h5>
+                                        <div class="row mb-3">
+                                            <div class="col-6 justify-content-center">
+                                                <label for="start_date mx-auto">From</label>
+                                                <input type="date" name="start_date" class="form-control"  onchange="updateBookingDay(<%= product.id_product %>)" id="start_date<%= product.id_product %>" required>
+                                                <script>document.getElementById("start_date"+<%= product.id_product %>).min = new Date().toISOString().split("T")[0]</script>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="end_date">To</label>
+                                                <input type="date" name="end_date" class="form-control" onchange="updateBookingDay(<%= product.id_product %>)" id="end_date<%= product.id_product %>"required>
+                                                <script>document.getElementById("end_date"+<%= product.id_product %>).min = new Date().toISOString().split("T")[0]</script>
+                                            </div>
+                                        </div>
+                                        <ul class="list-group my-3">
+                                            <li class="list-group-item active d-flex justify-content-between">
+                                                <div>Sub-Total:</div>
+                                                <p id="price<%= product.id_product %>" hidden> <%= product.price %>  </p>
+                                                <div>Rp. <span id="subTotal<%= product.id_product %>"><%=numberToCurrency(product.price)%> </span></div>
+                                            </li>
+                                        </ul>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-primary"
@@ -138,18 +158,51 @@
     </div>
 
 </section>
+<script src="/javascripts/numberToCurrency.js"></script>
 <script>
-    
-    function add() {
-        let value = $("#quantity").val()
-        value++
-        $("input[name=amount]").val(value)
+    let day
+    function updateBookingDay(id){
+        const startDate = new Date($("#start_date"+id).val())
+        const x = document.getElementById("end_date"+id).min = $("#start_date"+id).val()
+        let endDate = new Date($("#end_date"+id).val())
+        
+        if(!isNaN(startDate) && !isNaN(endDate) ){
+            if(startDate>endDate){
+                endDate = startDate 
+                $("#end_date"+id).val($("#start_date"+id).val())
+            }
+            day = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24) +1
+            $('#days'+id).text(day) 
+            let value = $("#quantity"+id).val()
+            let price = $("#price"+id).text()
+            subTotal = value * price * day
+            $('#subTotal'+id).text(numberToCurrency(subTotal))
+        }
+        
     }
-    function substract() {
-        let value = $("#quantity").val()
+    function add(id) {
+        let value = $("#quantity"+id).val()
+        let price = $("#price"+id).text()
+        value++
+        $("#quantity"+id).val(value)
+        subTotal = value * price
+        if(day > 1){
+            subTotal = subTotal * day
+        }
+        $('#subTotal'+id).text(numberToCurrency(subTotal))
+    }
+    function substract(id) {
+        let value = $("#quantity"+id).val()
+        let price = $("#price"+id).text()
+
         if (value > 1) {
             value--
         }
-        $("input[name=amount]").val(value)
+        $("#quantity"+id).val(value)
+        subTotal = value * price
+        if(day > 1){
+            subTotal = subTotal * day
+        }
+        $('#subTotal'+id).text(numberToCurrency(subTotal))
     }
 </script>

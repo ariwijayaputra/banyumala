@@ -157,26 +157,38 @@
                   </button>
               </div>
               <div class="modal-body overflow-auto">
-                  <table class="table table-striped">
+                <table class="table table-striped">
                     <thead>
                       <tr>
                         <th>No</th>
                         <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
+                        <th style="min-width: 100px;">Booking Start</th>
+                        <th style="min-width: 100px;">Booking End</th>
+                        <th>Days</th>
+                        <th>Qty</th>
+                        <th style="min-width: 100px;">Price</th>
                         <th style="min-width: 100px;">Sub Total</th>
                       </tr>
                     </thead>
                     
                     <tbody>
+                    <% let endDate %>
+                    <% let startDate %> 
+                    <% let day %> 
                     <% transaction.detail_transactions.forEach(detail => { %>
                      <% if (transaction.id_transaction == detail.id_transaction) { %>
                         <tr>
+                            <% startDate = new Date(detail.start_date) %> 
+                            <% endDate = new Date(detail.end_date) %> 
+                            <% day = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24) +1 %> 
                             <td scope="row"><%= i %> </td>
                             <td><%= detail.product.name %> </td>
+                            <td><%= detail.start_date %> </td>
+                            <td><%= detail.end_date%> </td>
+                            <td><%= day %> </td>
                             <td><%= detail.amount %></td>
                             <td>Rp. <%= numberToCurrency(detail.product.price) %></td>
-                            <td>Rp. <%= numberToCurrency(detail.product.price * detail.amount) %></td>
+                            <td>Rp. <%= numberToCurrency(detail.product.price * detail.amount *day) %></td>
                           </tr>
                         <% i++ %> 
                         

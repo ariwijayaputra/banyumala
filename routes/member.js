@@ -57,8 +57,15 @@ router.get('/history/:id',auth.checkAutinticated,auth.checkRoleMember, DetailTra
     let msg = res.app.locals.msg
     let user = req.user
     console.log(detailTransaction)
+    let month = req.query.month
+    if (!month) {
+        y = new Date().getFullYear()
+        m = new Date().getMonth() + 1
+        month = y.toString() + "-" + String(m).padStart(2, '0')
+    }
+    console.log(month)
     console.log("going to order")
-    res.render('member/orderHistory', { title: 'Order History', layout: './member/layout.ejs', Transactions, detailTransaction,msg, user, numberToCurrency }, (err,html)=>{
+    res.render('member/orderHistory', { title: 'Order History', layout: './member/layout.ejs', Transactions, detailTransaction,msg, user, numberToCurrency,month }, (err,html)=>{
         res.app.locals.msg = null;
         res.send(html);
     });

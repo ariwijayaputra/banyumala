@@ -87,12 +87,12 @@
                         </li>
                         <li class="nav-item">
                             <% if (title=='Order History' ) { %>
-                                <a href="/member/history/<%=user.id_user  %>" class="nav-link text-white">
+                                <a href="/member/history/<%=user.id_user  %>?month=all" class="nav-link text-white">
                                     <i class="nav-icon fa-solid fa-clock-rotate-left"></i>
                                     <p>History</p>
                                 </a>
                                 <% } else { %>
-                                    <a href="/member/history/<%=user.id_user  %>" class="nav-link">
+                                    <a href="/member/history/<%=user.id_user  %>?month=all" class="nav-link">
                                         <i class="nav-icon fa-solid fa-clock-rotate-left"></i>
                                         <p>History</p>
                                     </a>
