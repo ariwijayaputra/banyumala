@@ -38,7 +38,8 @@ router.post('/cart/:id',auth.checkAutinticated,auth.checkRoleMember, Cart.upsert
 });
 
 // Delete cart
-router.delete('/delete_cart/:id',auth.checkAutinticated,auth.checkRoleMember, Cart.deleteCartById, function (req, res, next) {
+router.delete('/delete_cart/:id/:id_cart',auth.checkAutinticated,auth.checkRoleMember, Cart.deleteCartById, function (req, res, next) {
+    console.log("going to delete cart")
     res.locals.msg = res.app.locals.msg;
     res.redirect(301, '/member/cart/'+req.body.id_user);
 });

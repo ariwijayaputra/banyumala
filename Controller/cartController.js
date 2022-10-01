@@ -67,10 +67,11 @@ const getCart = async (req, res, next) => {
 //DELETE Cart
 const deleteCartById = async (req, res, next) => {
     try {
+        console.log("========================")
         // check if the requested record exist, if exist delete
-        const isExist = await Cart.findOne({ where: { id_cart: req.params.id } });
+        const isExist = await Cart.findOne({ where: { id_cart: req.params.id_cart } });
         if (isExist) {
-            const result = await Cart.destroy({ where: { id_cart: req.params.id } });
+            const result = await Cart.destroy({ where: { id_cart: req.params.id_cart } });
             if (result) {
                 res.app.locals.Cart = { msg: "data berhasil dihapus" };
                 res.app.locals.msg = "Success! Data has been deleted";

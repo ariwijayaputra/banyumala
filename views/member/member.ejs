@@ -117,20 +117,31 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <h5 class="my-3 text-center">Booking For: <span id="days<%= product.id_product %>"></span> Days</h5>
+                                        <h5 class="my-3 text-center">Booking For: <span id="days<%= product.id_product %>">1</span> Days</h5>
                                         <div class="row mb-3">
                                             <div class="col-6 justify-content-center">
                                                 <label for="start_date mx-auto">From</label>
                                                 <input type="date" name="start_date" class="form-control"  onchange="updateBookingDay(<%= product.id_product %>)" id="start_date<%= product.id_product %>" required>
-                                                <script>document.getElementById("start_date"+<%= product.id_product %>).min = new Date().toISOString().split("T")[0]</script>
                                             </div>
                                             <div class="col-6">
                                                 <label for="end_date">To</label>
                                                 <input type="date" name="end_date" class="form-control" onchange="updateBookingDay(<%= product.id_product %>)" id="end_date<%= product.id_product %>"required>
-                                                <script>document.getElementById("end_date"+<%= product.id_product %>).min = new Date().toISOString().split("T")[0]</script>
+                                                <script>
+                                                    console.log(new Date().toISOString().split("T")[0])
+                                                    minDate = new Date()
+                                                    minDate.setDate(minDate.getDate()+2)
+                                                    console.log(minDate)
+                                                    document.getElementById("start_date"+<%= product.id_product %>).min = minDate.toISOString().split("T")[0]
+                                                    document.getElementById("start_date"+<%= product.id_product %>).value = minDate.toISOString().split("T")[0]   
+                                                    document.getElementById("end_date"+<%= product.id_product %>).min = minDate.toISOString().split("T")[0]
+                                                    document.getElementById("end_date"+<%= product.id_product %>).value = minDate.toISOString().split("T")[0] 
+                                                </script>
                                             </div>
                                         </div>
                                         <ul class="list-group my-3">
+                                            <li class="list-group-item">
+                                                Note: Reservations must be made at least 2 days before booking starts
+                                            </li>
                                             <li class="list-group-item active d-flex justify-content-between">
                                                 <div>Sub-Total:</div>
                                                 <p id="price<%= product.id_product %>" hidden> <%= product.price %>  </p>

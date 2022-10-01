@@ -17,7 +17,7 @@
 <div class="d-flex align-items-stretch m-3">
     <div class=" w-100 text-left p-3">
         <% if (msg) { %>
-            <div class="alert alert-success alert-dismissible fade text-center m-3" role="alert" id="msgInfo">
+            <div class="alert alert-success alert-dismissible fade text-center m-3" role="alert" id=""msgInfo>
                 <strong><%= msg %> </strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -85,11 +85,9 @@
                                             </td>
                                             <td class="align-middle">
                                                 <input type="date" name="start_date" id="start_date<%= cart.id_cart %>"  class="form-control" onchange="updateBookingDay(<%= cart.id_cart %>,<%= cart.id_product %>)" value="<%= cart.start_date %>">
-                                                <script>document.getElementById("start_date"+<%= cart.id_cart %>).min = new Date().toISOString().split("T")[0]</script>
                                             </td>
                                             <td class="align-middle">
                                                 <input type="date" name="end_date" id="end_date<%= cart.id_cart %>" class="form-control" onchange="updateBookingDay(<%= cart.id_cart %>,<%= cart.id_product %>)" value="<%= cart.end_date %>">
-                                                <script>document.getElementById("end_date"+<%= cart.id_cart %>).min = new Date().toISOString().split("T")[0]</script>
                                             </td>
                                             <td class="align-middle" id="day<%= cart.id_cart %>"><%= day %> </td>
                                             <td class="align-middle">
@@ -98,6 +96,31 @@
                                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                                 </button>
                                             </td>
+                                            <script>
+                                                console.log(new Date().toISOString().split("T")[0])
+                                                minDate = new Date()
+                                                minDate.setDate(minDate.getDate()+2)
+                                                currentDate = new Date(document.getElementById("start_date"+<%= cart.id_cart %>).value)
+                                                console.log(currentDate)
+                                                console.log(minDate)
+                                                document.getElementById("start_date"+<%= cart.id_cart %>).min = minDate.toISOString().split("T")[0]
+                                                document.getElementById("end_date"+<%= cart.id_cart %>).min = minDate.toISOString().split("T")[0]
+                                                let note
+                                                if(currentDate < minDate){
+                                                    if(currentDate.getDate() != minDate.getDate()){
+                                                        document.getElementById("start_date"+<%= cart.id_cart %>).value = minDate.toISOString().split("T")[0]
+                                                        let startDate = new Date($("#start_date"+<%= cart.id_cart %>).val())
+                                                        let endDate = new Date($("#end_date"+<%= cart.id_cart %>).val())
+                                                        if(startDate>=endDate){
+                                                            document.getElementById("end_date"+<%= cart.id_cart %>).value = minDate.toISOString().split("T")[0]
+                                                            endDate = new Date($("#end_date"+<%= cart.id_cart %>).val())
+                                                        }
+                                                        day = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24) +1
+                                                        $('#day'+<%= cart.id_cart %>).text(day) 
+                                                        note = "We changed some of your order booking day because it have exceeded the time limit for ordering. reservations can only be made at least 2 days in advance."    
+                                                    }
+                                                }
+                                            </script>
                                         </tr>
                                         <!-- Modal Delete -->
                                         <div class="modal fade" id="delete<%= cart.id_cart %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -114,9 +137,9 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
-                                                    <form action="/member/delete_cart/<%= cart.id_cart %>?_method=DELETE" method="POST" class="d-inline">
+                                                    <form action="/member/delete_cart/<%= user.id_user %>/<%= cart.id_cart %>?_method=DELETE" method="POST" class="d-inline">
                                                         <input type="hidden" name="id_user" value="<%= userCart.id_user %>" >
-                                                        <button type="submit" class="btn btn-dark">Delete Category</button>
+                                                        <button type="submit" class="btn btn-dark">Delete Product</button>
                                                     </form>
                                                 </div>
                                                 </div>
@@ -132,6 +155,19 @@
                 </div>
             </div>
         </div>
+        <div class="alert alert-warning alert-dismissible fade text-center m-3" role="alert" id="msgInfo2">
+            <strong id="noteText"></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <script>
+            if(note){
+                console.log(note)
+                $('#msgInfo2').fadeIn(1500,function() { $(this).addClass("show"); });
+                $('#noteText').text(note);
+            }
+        </script>
         <div class="card col-12 col-md-5 col-lg-4 p-3">
             <div class="card-header">Summary</div>
             <div class="card-body d-flex">
@@ -246,16 +282,17 @@
     $(document).ready(function () {
         setTimeout(OpenMsg, 500);
         function OpenMsg(){
-            $('#msgInfo').fadeIn(1500,function() { $(this).addClass("show"); });   
+            $('#msgInfo').fadeIn(1500,function() { $(this).addClass("show"); }); 
         }
         
         detailTransaksi.forEach(detail => {
             detailTransaction[detail.id_product] = detail.amount
-            start_date[detail.id_product]=detail.start_date
-            end_date[detail.id_product]=detail.end_date
+            start_date[detail.id_product]=$('#start_date'+detail.id_cart).val()
+            end_date[detail.id_product]=$('#end_date'+detail.id_cart).val()
         })
         $('#productAmount').val(JSON.stringify(detailTransaction))
         $('#start_date').val(JSON.stringify(start_date))
+        console.log(start_date)
         $('#end_date').val(JSON.stringify(end_date))
     })
 </script>
