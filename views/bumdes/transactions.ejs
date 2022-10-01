@@ -71,7 +71,11 @@
                                   %> 
                                   <tr>
                                       <td scope="row" class="align-middle"><%= number %></td>
-                                      <td class="align-middle"><%=transaction.user.name %></td>
+                                      <% if (!transaction.user) { %>
+                                        <td class="align-middle">-</td>
+                                      <% } else { %>
+                                            <td class="align-middle"><%=transaction.user.name %></td>
+                                      <% } %>
                                       <td class="align-middle"><%=date %></td>
                                       <td class="align-middle">Rp. <%=numberToCurrency(transaction.total) %></td>
                                       <td class="align-middle">Bank Trf</td>
