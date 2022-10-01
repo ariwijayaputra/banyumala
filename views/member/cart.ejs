@@ -1,5 +1,6 @@
 <script src="/javascripts/numberToCurrency.js"></script>
 <script>
+    let note
     function updateBookingDay(id){
         const startDate = new Date($("#start_date"+id).val())
         const x = document.getElementById("end_date"+id).min = $("#start_date"+id).val()
@@ -17,7 +18,7 @@
 <div class="d-flex align-items-stretch m-3">
     <div class=" w-100 text-left p-3">
         <% if (msg) { %>
-            <div class="alert alert-success alert-dismissible fade text-center m-3" role="alert" id=""msgInfo>
+            <div class="alert alert-success alert-dismissible fade text-center m-3" role="alert" id="msgInfo">
                 <strong><%= msg %> </strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -35,6 +36,7 @@
                                 <th scope="col" style="min-height: 96px;">Photo</th>
                                 <th scope="col" style="min-width: 144px;" class="col">Product Name</th>
                                 <th scope="col" style="min-width: 104px;">Price</th>
+                                <th scope="col" style="min-width: 104px;">Stock</th>
                                 <th scope="col" style="min-width: 180px;" class="col">Quantity</th>
                                 <th scope="col" style="min-width: 130px;" class="col">Booking Start</th>
                                 <th scope="col" style="min-width: 130px;" class="col">Booking End</th>
@@ -63,6 +65,7 @@
                                             <td class="align-middle"><%= cart.product.name %> </td>
                                             <p id="price<%= cart.id_cart %>" hidden><%= cart.product.price %> </p>
                                             <td class="align-middle"><%= numberToCurrency(cart.product.price) %></td>
+                                            <td class="align-middle"><%= cart.product.stock %> </td>
                                             <td class="align-middle">
                                                 <div class="input-group w-sm-25 mx-auto">
                                                     <div class="input-group-prepend">
@@ -71,10 +74,10 @@
                                                             <i class="fa fa-minus" aria-hidden="true"></i>
                                                         </button>
                                                     </div>
-                                                    <input type="text" id="quantity<%= cart.id_cart %>" name="amount"
+                                                    <input type="number" id="quantity<%= cart.id_cart %>" name="amount"
                                                         class="form-control border-secondary text-center bg-white " placeholder="0"
                                                         aria-label="Example text with button addon" aria-describedby="button-addon1"
-                                                        value="<%= cart.amount %>">
+                                                        value="<%= cart.amount %>" max="<%= cart.product.stock %>" min="1" onkeydown="return false" readonly>
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-secondary" onclick="add('<%= cart.id_cart %>', '<%= cart.id_product %>')"
                                                             type="button" id="button-addon1">
@@ -100,12 +103,13 @@
                                                 console.log(new Date().toISOString().split("T")[0])
                                                 minDate = new Date()
                                                 minDate.setDate(minDate.getDate()+2)
+                                                minDate.setTime(minDate.getTime()+8*60 * 60 * 1000)
                                                 currentDate = new Date(document.getElementById("start_date"+<%= cart.id_cart %>).value)
                                                 console.log(currentDate)
                                                 console.log(minDate)
                                                 document.getElementById("start_date"+<%= cart.id_cart %>).min = minDate.toISOString().split("T")[0]
                                                 document.getElementById("end_date"+<%= cart.id_cart %>).min = minDate.toISOString().split("T")[0]
-                                                let note
+                                                
                                                 if(currentDate < minDate){
                                                     if(currentDate.getDate() != minDate.getDate()){
                                                         document.getElementById("start_date"+<%= cart.id_cart %>).value = minDate.toISOString().split("T")[0]
@@ -334,9 +338,9 @@
     }
     function updateTotalText(totalPrice){
         $('#totalPrice').text(totalPrice)
-        $('#totalPriceText').text(totalPrice)
+        $('#totalPriceText').text("Rp "+ numberToCurrency(totalPrice))
         $('#total').val(totalPrice)
-        $('#grandTotal').text(totalPrice)
+        $('#grandTotal').text("Rp "+ numberToCurrency(totalPrice))
     }
     function updateTotal(price, qty, days){
         totalPrice = Number($('#totalPrice').text())
@@ -351,13 +355,16 @@
         let qty = $('#quantity'+id).val()
         let price = Number($('#price'+id).text())
         let days = Number($('#days'+id).text())
-        qty++
-        updateTotal(price, +1,days)
-        $('#checkQty'+id).text(qty)
-        $('#subTotal'+id).text(numberToCurrency(qty*price*days))
-        $('#quantity'+id).val(qty)
-        detailTransaction[id_product] = qty
-        $('#productAmount').val(JSON.stringify(detailTransaction))
+        if(qty< Number($("#quantity"+id).attr('max'))){
+            qty++
+            updateTotal(price, +1,days)
+            $('#checkQty'+id).text(qty)
+            $('#subTotal'+id).text(numberToCurrency(qty*price*days))
+            $('#quantity'+id).val(qty)
+            detailTransaction[id_product] = qty
+            $('#productAmount').val(JSON.stringify(detailTransaction))
+        }
+        
     }
     function substract(id,id_product) {
         let qty = $('#quantity'+id).val()

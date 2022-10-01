@@ -1,4 +1,5 @@
 const Transactions = require("../Models/transactionModel.js")
+const Products = require("../Models/productModel.js")
 const errHandler = require("../Helpers/error_helper.js");
 const Users = require("../Models/userModel.js")
 const DetailTransactions = require("../Models/detailTransactionModel.js")
@@ -7,33 +8,55 @@ const { Op } = require("sequelize");
 // Create/update Transactions
 const upsertTransactions = async (req, res, next) => {
 	try {
-		console.log(req.body)
-		let result = await Transactions.upsert(req.body, { where: { id_transaction: req.body.id_transaction } });
-		result = JSON.parse(JSON.stringify(result[0]));
-		res.app.locals.Transactions = result;
+
 		console.log("==================================")
 		let productAmount = JSON.parse(req.body.productAmount)
 		let start_date = JSON.parse(req.body.start_date)
 		let end_date = JSON.parse(req.body.end_date)
 		let productArray = []
+		let productStock = []
 		let idProduct = Object.keys(productAmount)
 		let amount = Object.values(productAmount)
 		start_date = Object.values(start_date)
 		end_date = Object.values(end_date)
 		console.log(productAmount)
-		for (let index = 0; index < Object.keys(productAmount).length; index++) {
-			productArray.push({
-				"id_transaction": res.app.locals.Transactions.id_transaction,
+		// check if transaction can be made (stock is ready)
+		console.log("checking product stock..")
+		for (let index = 0; index < idProduct.length; index++) {
+			const element = idProduct[index];
+			console.log("checking product" + element)
+			let ready = await Products.findOne({ where: { id_product: element } })
+			console.log(ready);
+			if (ready.stock < amount[index]) {
+				res.app.locals.msg = "Sorry your order can not be made becauese of insuficient Stock.";
+				res.locals.skip = 1
+				console.log("order cant be made")
+				next();
+			}
+			productStock.push({
 				"id_product": idProduct[index],
-				"amount": amount[index],
-				"start_date": start_date[index],
-				"end_date" : end_date[index]
+				"stock": ready.stock - amount[index],
 			})
 		}
-		console.log(productArray)
-		result = await DetailTransactions.bulkCreate(productArray)
-		console.log(result)
-		res.app.locals.msg = "Success! Transaction has been maded. Pleas wait for admin confirmation";
+		if (!res.locals.skip) {
+			let result = await Transactions.upsert(req.body, { where: { id_transaction: req.body.id_transaction } });
+			result = JSON.parse(JSON.stringify(result[0]));
+			res.app.locals.Transactions = result;
+			for (let index = 0; index < Object.keys(productAmount).length; index++) {
+				productArray.push({
+					"id_transaction": res.app.locals.Transactions.id_transaction,
+					"id_product": idProduct[index],
+					"amount": amount[index],
+					"start_date": start_date[index],
+					"end_date": end_date[index]
+				})
+			}
+			await Products.bulkCreate(productStock, { updateOnDuplicate: ["stock"] })
+			result = await DetailTransactions.bulkCreate(productArray)
+			console.log(result)
+			res.app.locals.msg = "Success! Transaction has been maded. Pleas wait for admin confirmation";
+		}
+
 	} catch (error) {
 		res.app.locals.Transactions = JSON.parse(JSON.stringify(errHandler(error)));
 	}
@@ -161,24 +184,27 @@ const deleteTransactionsById = async (req, res, next) => {
 const uploadFIle = async (req, res, next) => {
 	try {
 		console.log(req.files)
-		if (!req.files) {
-			next();
-		}
-		else {
-
-			let transactionImg = req.files.payment;
-			let imgFormat = transactionImg.name;
-			imgFormat = imgFormat.split(".").pop();
-			let imgName = "transaction" + Number(res.app.locals.Transactions.id_transaction) + "." + imgFormat;
-			//Use the mv() method to place the file in upload directory (i.e. "uploads")
-			console.log("saving...")
-			transactionImg.mv('./uploads/' + imgName);
-			console.log("saving...")
-			console.log(res.app.locals.Transactions);
-			await Transactions.update({ payment: imgName }, { where: { id_transaction: res.app.locals.Transactions.id_transaction } })
-			res.app.locals.Transactions.payment = imgName;
-
-			next()
+		console.log(res.locals.skip)
+		if(!res.locals.skip){
+			if (!req.files) {
+				next();
+			}
+			else {
+	
+				let transactionImg = req.files.payment;
+				let imgFormat = transactionImg.name;
+				imgFormat = imgFormat.split(".").pop();
+				let imgName = "transaction" + Number(res.app.locals.Transactions.id_transaction) + "." + imgFormat;
+				//Use the mv() method to place the file in upload directory (i.e. "uploads")
+				console.log("saving...")
+				transactionImg.mv('./uploads/' + imgName);
+				console.log("saving...")
+				console.log(res.app.locals.Transactions);
+				await Transactions.update({ payment: imgName }, { where: { id_transaction: res.app.locals.Transactions.id_transaction } })
+				res.app.locals.Transactions.payment = imgName;
+	
+				next()
+			}
 		}
 	} catch (err) {
 		res.app.locals.Transactions = JSON.parse(JSON.stringify(errHandler(err)));

@@ -15,6 +15,29 @@ const upsertProducts = async (req, res, next) => {
     next();
 };
 
+// Create/update Products
+const updateStock = async (req, res, next) => {
+	try {
+        let idProduct = Object.keys(req.body)
+        let stockProduct = Object.values(req.body)
+        let productStock = []
+        for (let index = 0; index < idProduct.length; index++) {
+            let ready = await Products.findOne({ where: { id_product: idProduct[index] } })
+            productStock.push({
+				"id_product": idProduct[index],
+				"stock": Number(ready.stock) + Number(stockProduct[index]),
+			})
+        }
+        await Products.bulkCreate(productStock, { updateOnDuplicate: ["stock"] })
+		// let result = await Products.upsert(req.body, { where: { id_product: req.body.id_product } });
+        // result=JSON.parse(JSON.stringify(result[0]));
+		// res.app.locals.Products = result;
+		res.app.locals.msg = "Success! Data has been saved";
+	} catch (error) {
+		res.app.locals.Categories=JSON.parse(JSON.stringify(errHandler(error)));
+	}
+    next();
+};
 
 // GET all data Products
 const getProducts = async (req, res, next) => {
@@ -88,4 +111,5 @@ module.exports = {
     deleteProductsById,
     getProducts,
     uploadFIle,
+    updateStock
 }

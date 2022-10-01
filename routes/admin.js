@@ -161,4 +161,12 @@ router.delete('/products/:id', auth.checkAutinticated, auth.checkRoleAdmin, prod
     res.redirect(301, '/admin/products');
 });
 
+// update stock product
+router.post('/updatestock', auth.checkAutinticated, auth.checkRoleAdmin, products.updateStock, async function (req, res, next) {
+    console.log(res.app.locals.Products);
+    res.locals.msg = res.app.locals.msg;
+    console.log(res.locals.msg)
+    res.redirect(301, '/admin/transactions?month=all');
+});
+
 module.exports = router;

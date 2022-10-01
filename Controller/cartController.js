@@ -82,27 +82,29 @@ const deleteCartById = async (req, res, next) => {
     } catch (error) {
         res.app.locals.Cart = JSON.parse(JSON.stringify(errHandler(error)));
     }
-    
+
     next();
 };
 
 //DELETE Cart
 const deleteCartByUser = async (req, res, next) => {
     try {
-        // check if the requested record exist, if exist delete
-        const isExist = await Cart.findOne({ where: { id_user: req.params.id } });
-        if (isExist) {
-            const result = await Cart.destroy({ where: { id_user: req.params.id } });
-            if (result) {
-                res.app.locals.Cart = { msg: "data berhasil dihapus" };
+        if (!res.locals.skip) {
+            // check if the requested record exist, if exist delete
+            const isExist = await Cart.findOne({ where: { id_user: req.params.id } });
+            if (isExist) {
+                const result = await Cart.destroy({ where: { id_user: req.params.id } });
+                if (result) {
+                    res.app.locals.Cart = { msg: "data berhasil dihapus" };
+                }
+            } else {
+                res.app.locals.Cart = { error: "Data tidak ada pada tabel" };
             }
-        } else {
-            res.app.locals.Cart = { error: "Data tidak ada pada tabel" };
         }
     } catch (error) {
         res.app.locals.Cart = JSON.parse(JSON.stringify(errHandler(error)));
     }
-    
+
     next();
 };
 

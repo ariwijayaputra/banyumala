@@ -20,6 +20,10 @@ const Products = db.define(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
+		stock:{
+			type: DataTypes.INTEGER,
+			allowNull: false,
+		},
 		photo: {
 			type: DataTypes.TEXT
 		},
