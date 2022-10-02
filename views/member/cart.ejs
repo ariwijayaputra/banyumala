@@ -102,15 +102,17 @@
                                             <script>
                                                 console.log(new Date().toISOString().split("T")[0])
                                                 minDate = new Date()
+                                                console.log(minDate)
                                                 minDate.setDate(minDate.getDate()+2)
-                                                minDate.setTime(minDate.getTime()+8*60 * 60 * 1000)
+                                                console.log(minDate)
+                                                minDate.setTime(minDate.getTime()-8*60 * 60 * 1000)
                                                 currentDate = new Date(document.getElementById("start_date"+<%= cart.id_cart %>).value)
                                                 console.log(currentDate)
                                                 console.log(minDate)
                                                 document.getElementById("start_date"+<%= cart.id_cart %>).min = minDate.toISOString().split("T")[0]
                                                 document.getElementById("end_date"+<%= cart.id_cart %>).min = minDate.toISOString().split("T")[0]
                                                 
-                                                if(currentDate < minDate){
+                                                if(currentDate< minDate){
                                                     if(currentDate.getDate() != minDate.getDate()){
                                                         document.getElementById("start_date"+<%= cart.id_cart %>).value = minDate.toISOString().split("T")[0]
                                                         let startDate = new Date($("#start_date"+<%= cart.id_cart %>).val())

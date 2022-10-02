@@ -23,6 +23,9 @@ const DetailTransaction = db.define(
 		end_date:{
 			type: DataTypes.DATEONLY,
 			allowNull: false,
+		},
+		product_returned:{
+			type: DataTypes.INTEGER,
 		}
 	},
 	{

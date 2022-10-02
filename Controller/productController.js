@@ -1,6 +1,7 @@
 const Products = require("../Models/productModel.js")
 const errHandler =  require("../Helpers/error_helper.js");
 const Categories = require("../Models/categoryModel.js");
+const DetailTransactions = require("../Models/detailTransactionModel.js")
 
 // Create/update Products
 const upsertProducts = async (req, res, next) => {
@@ -21,12 +22,15 @@ const updateStock = async (req, res, next) => {
         let idProduct = Object.keys(req.body)
         let stockProduct = Object.values(req.body)
         let productStock = []
+        let returnedProduct = []
+        console.log(req.body)
         for (let index = 0; index < idProduct.length; index++) {
             let ready = await Products.findOne({ where: { id_product: idProduct[index] } })
             productStock.push({
 				"id_product": idProduct[index],
 				"stock": Number(ready.stock) + Number(stockProduct[index]),
 			})
+            //await DetailTransactions.update
         }
         await Products.bulkCreate(productStock, { updateOnDuplicate: ["stock"] })
 		// let result = await Products.upsert(req.body, { where: { id_product: req.body.id_product } });
