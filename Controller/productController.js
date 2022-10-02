@@ -1,7 +1,7 @@
 const Products = require("../Models/productModel.js")
 const errHandler =  require("../Helpers/error_helper.js");
 const Categories = require("../Models/categoryModel.js");
-const DetailTransactions = require("../Models/detailTransactionModel.js")
+const Transaction = require("../Models/transactionModel.js")
 
 // Create/update Products
 const upsertProducts = async (req, res, next) => {
@@ -19,6 +19,9 @@ const upsertProducts = async (req, res, next) => {
 // Create/update Products
 const updateStock = async (req, res, next) => {
 	try {
+        await Transaction.update(req.body,{ where: { id_transaction: req.body.id_transaction } })
+        delete req.body.id_transaction
+        delete req.body.status
         let idProduct = Object.keys(req.body)
         let stockProduct = Object.values(req.body)
         let productStock = []

@@ -91,6 +91,8 @@
                                                 <span class="badge badge-success text-md align-middle">success</span>
                                             <% } else if (transaction.status == 'Pending') { %>
                                                 <span class="badge badge-warning text-md align-middle">Pending</span>
+                                            <% } else if (transaction.status == 'Returned') { %>
+                                                <span class="badge badge-secondary text-md align-middle">Returned</span>
                                             <% } else { %>
                                                 <span class="badge badge-danger text-md align-middle">Canceled</span>
                                             <% } %>
@@ -207,10 +209,17 @@
                                 <td>Rp. <%= numberToCurrency(detail.product.price) %></td>
                                 <td>Rp. <%= numberToCurrency(detail.product.price * detail.amount *day) %></td>
                                 <td>
-                                    <input type="number" id="return<%= detail.product.id_product %>" name="<%= detail.product.id_product %>"
-                                    class="form-control border-secondary text-center bg-white " placeholder="0"
-                                    aria-label="Example text with button addon" aria-describedby="button-addon1"
-                                    value="<%=detail.amount %>" max="<%=detail.amount %>" min="0">
+                                    <% if (transaction.status == "Returned") { %>
+                                        <input type="number" id="return<%= detail.product.id_product %>" disabled name="<%= detail.product.id_product %>"
+                                        class="form-control border-secondary text-center bg-white " placeholder="0"
+                                        aria-label="Example text with button addon" aria-describedby="button-addon1"
+                                        value="<%=detail.amount %>" max="<%=detail.amount %>" min="0">
+                                    <% } else { %>
+                                        <input type="number" id="return<%= detail.product.id_product %>" name="<%= detail.product.id_product %>"
+                                        class="form-control border-secondary text-center bg-white " placeholder="0"
+                                        aria-label="Example text with button addon" aria-describedby="button-addon1"
+                                        value="<%=detail.amount %>" max="<%=detail.amount %>" min="0">
+                                    <% } %>
                                 </td>
                             <% } %>
                             
@@ -224,7 +233,13 @@
                   </table>
               </div>
               <div class="modal-footer">
-                  <button type="submit" class="btn btn-success">Confirm Returned Product</button>
+                  <input type="hidden" name="status" value="Returned">
+                  <input type="hidden" name="id_transaction" id="" value="<%= transaction.id_transaction %>" >
+                  <% if (transaction.status == "Returned") { %>
+                    <button type="submit" class="btn btn-secondary" disabled>Confirm Returned Product</button>
+                  <% } else { %>
+                    <button type="submit" class="btn btn-success">Confirm Returned Product</button>
+                  <% } %>
                   <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
               </div>
               </form>
