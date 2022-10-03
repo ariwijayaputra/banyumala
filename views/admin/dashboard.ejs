@@ -132,7 +132,7 @@
                <% if (!detailTransaction.error) { %>
                 <% detailTransaction.forEach(transaction => { %>
                   <% transaction.detail_transactions.forEach(detail => { %>
-                    <% if (detail.product.id_category == category.id_category) { %>
+                    <% if (detail.product && detail.product.id_category == category.id_category) { %>
                       <% count+=detail.amount %> 
                     <% } %> 
                   <% }) %>
