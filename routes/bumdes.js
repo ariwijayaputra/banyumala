@@ -26,13 +26,15 @@ router.get('/', auth.checkAutinticated, auth.checkRoleBumdes, categories.getCate
     if (!detailTransaction.error) {
         detailTransaction.forEach(transaction => {
             transaction.detail_transactions.forEach(detail => {
-                console.log(detail.product.name)
+                //console.log(detail.product.name)
                 console.log(detail.amount)
-                if (ProductSold[detail.product.name]) {
-                    ProductSold[detail.product.name] += detail.amount
-                }
-                else {
-                    ProductSold[detail.product.name] = detail.amount
+                if(detail.product){
+                    if (ProductSold[detail.product.name]) {
+                        ProductSold[detail.product.name] += detail.amount
+                    }
+                    else {
+                        ProductSold[detail.product.name] = detail.amount
+                    }
                 }
             })
         });
