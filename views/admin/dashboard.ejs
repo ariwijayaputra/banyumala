@@ -86,7 +86,7 @@
               <% if (!detailTransaction.error) { %>
                 <% let totalTransactions = 0 %> 
                 <% detailTransaction.forEach(transaction => { %>
-                  <% if (transaction.status == "Success") { %>
+                  <% if (transaction.status == "Success" || transaction.status =="Returned") { %>
                     <% totalTransactions+=transaction.total %> 
                   <% } %>
                 <% }) %>
