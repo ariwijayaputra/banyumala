@@ -93,8 +93,10 @@
                                                 <span class="badge badge-warning text-md align-middle">Pending</span>
                                             <% } else if (transaction.status == 'Returned') { %>
                                                 <span class="badge badge-secondary text-md align-middle">Returned</span>
+                                            <% } else if (transaction.status == 'Canceled') { %>
+                                                <span class="badge badge-danger text-md align-middle">Canceled</span>    
                                             <% } else { %>
-                                                <span class="badge badge-danger text-md align-middle">Canceled</span>
+                                                <span class="badge badge-danger text-md align-middle">Refused</span>
                                             <% } %>
                                         </button>
                                       </td>
@@ -235,7 +237,7 @@
               <div class="modal-footer">
                   <input type="hidden" name="status" value="Returned">
                   <input type="hidden" name="id_transaction" id="" value="<%= transaction.id_transaction %>" >
-                  <% if (transaction.status == "Returned") { %>
+                  <% if (transaction.status == "Returned" || transaction.status == "Canceled" ) { %>
                     <button type="submit" class="btn btn-secondary" disabled>Confirm Returned Product</button>
                   <% } else { %>
                     <button type="submit" class="btn btn-success">Confirm Returned Product</button>

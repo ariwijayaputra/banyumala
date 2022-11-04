@@ -91,8 +91,12 @@
                                                 <span class="badge badge-success text-md align-middle">success</span>
                                             <% } else if (transaction.status == 'Pending') { %>
                                                 <span class="badge badge-warning text-md align-middle">Pending</span>
+                                            <% } else if (transaction.status == 'Returned') { %>
+                                                <span class="badge badge-secondary text-md align-middle">Returned</span>
+                                            <% } else if (transaction.status == 'Canceled') { %>
+                                                <span class="badge badge-danger text-md align-middle">Canceled</span>    
                                             <% } else { %>
-                                                <span class="badge badge-danger text-md align-middle">Canceled</span>
+                                                <span class="badge badge-danger text-md align-middle">Refused</span>
                                             <% } %>
                                         </button>
                                       </td>

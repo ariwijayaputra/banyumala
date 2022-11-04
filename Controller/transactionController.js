@@ -1,10 +1,11 @@
 const Transactions = require("../Models/transactionModel.js")
+const DetailTransaction = require("../Models/detailTransactionModel.js")
 const Products = require("../Models/productModel.js")
 const errHandler = require("../Helpers/error_helper.js");
 const Users = require("../Models/userModel.js")
 const DetailTransactions = require("../Models/detailTransactionModel.js")
 const sequelize = require("sequelize")
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 // Create/update Transactions
 const upsertTransactions = async (req, res, next) => {
 	try {
@@ -71,6 +72,36 @@ const updateTransaction = async (req, res, next) => {
 		result = JSON.parse(JSON.stringify(result[0]));
 		res.app.locals.Transactions = result;
 		res.app.locals.msg = "Success! Transaction status changed";
+	} catch (error) {
+		res.app.locals.Transactions = JSON.parse(JSON.stringify(errHandler(error)));
+	}
+	next();
+};
+
+// Create/update Transactions
+const memberCancelTransaction = async (req, res, next) => {
+	try {
+		console.log(req.body)
+		//update status transaction
+		let result
+		result = await Transactions.update(req.body, { where: { id_transaction: req.body.id_transaction } })
+		//result = JSON.parse(JSON.stringify(result[0]));
+		// return product
+		result = await DetailTransaction.findAll({where:{id_transaction:req.body.id_transaction}})
+		let detailTransaction=[]
+		result.forEach(element => {
+			detailTransaction.push(JSON.parse(JSON.stringify(element)))
+		});
+		detailTransaction.forEach(async element => {
+			element.product_returned = element.amount
+			await DetailTransactions.update(element, { where: { id_detail: element.id_detail } })
+			let product = await Products.findOne({where:{id_product:element.id_product}})
+			product = JSON.parse(JSON.stringify(product))
+			product.stock += element.product_returned
+			await Products.update(product, {where:{id_product:element.id_product}})
+		})
+		console.log(detailTransaction)
+		res.app.locals.msg = "Success! Transaction is canceled";
 	} catch (error) {
 		res.app.locals.Transactions = JSON.parse(JSON.stringify(errHandler(error)));
 	}
@@ -219,5 +250,6 @@ module.exports = {
 	deleteTransactionsById,
 	getTransactions,
 	uploadFIle,
+	memberCancelTransaction,
 	getTransactionsByMonth
 }

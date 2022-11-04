@@ -2,6 +2,7 @@
 function checkAutinticated(req, res, next){
     //console.log(req.isAuthenticated())
     if(req.isAuthenticated()){
+        console.log("authenticated")
         return next()
     }else{
         console.log("not auth")
@@ -12,8 +13,12 @@ function checkAutinticated(req, res, next){
 function checkRoleMember( req, res, next){
     if(req.user.id_role == 3){
         if(req.params.id == req.user.id_user){
+            console.log("role authenticated")
             return next()
         }
+        console.log("not authenticated")
+        console.log(`id user= ${req.user.id_user}`)
+        console.log(`id role= ${req.user.id_role}`)
         return res.redirect(302,'/member/'+String(req.user.id_user))
     }
     else if(req.user.id_role == 2){
