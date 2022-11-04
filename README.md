@@ -46,16 +46,16 @@ apabila sukses, server dapat dijalankan kembali dengan memasukan perintah nodemo
 - http://localhost:3000/admin/categories
 - http://localhost:3000/admin/products
 - http://localhost:3000/admin/members
-## Half Complete page
 - http://localhost:3000/admin/transactions
-- http://localhost:3000/admin/
+- http://localhost:3000/admin
+- http://localhost:3000/bumdes
+- http://localhost:3000/member
 - http://localhost:3000/login
 - http://localhost:3000/signup
 - http://localhost:3000/
-## in Progress
+## Half Complete page
 
-- http://localhost:3000/bumdes
-- http://localhost:3000/member
+## in Progress
 
 ## Issues
 - harga di detail transaksi seharusnya tidak berubah saat harga produk diubah.
